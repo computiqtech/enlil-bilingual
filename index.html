@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="html-root">
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ENLIL AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:#06080f;color:#fff;font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
+:root{
+  --bg:#06080f;--nav-bg:#080b14;--nav-border:rgba(255,255,255,0.07);
+  --card:#0d1525;--card-h:#111d30;
+  --blue:#3b82f6;--blue-dim:rgba(59,130,246,0.14);
+  --purple:#2d1b88;--teal:#10b981;--teal-dim:rgba(16,185,129,0.12);
+  --amber:#f59e0b;--amber-dim:rgba(245,158,11,0.12);
+  --gray:rgba(255,255,255,0.52);--gray-l:rgba(255,255,255,0.72);
+  --divider:rgba(255,255,255,0.07);
+  --fd:'Sora',sans-serif;--fb:'Inter',sans-serif;--r:14px;
+}
+.page{display:none;}.page.active{display:block;}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;background:var(--nav-bg);border-bottom:1px solid var(--nav-border);display:flex;align-items:center;padding:0 48px;backdrop-filter:blur(12px);}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer;flex-shrink:0;}
+.nav-logo-icon{width:26px;height:26px;}
+.nav-logo-text{font-family:var(--fd);font-size:15px;font-weight:700;color:#fff;letter-spacing:.06em;}
+.nav-links{display:flex;align-items:center;list-style:none;margin:0 auto;}
+.nav-links li a{display:block;padding:0 20px;font-size:14px;font-weight:500;color:var(--gray);text-decoration:none;line-height:68px;position:relative;cursor:pointer;transition:color .2s;}
+.nav-links li a:hover{color:#fff;}
+.nav-links li.active a{color:#fff;font-weight:600;}
+.nav-links li.active a::after{content:'';position:absolute;bottom:0;left:20px;right:20px;height:3px;background:var(--blue);border-radius:2px 2px 0 0;}
+.lang-btn{display:flex;align-items:center;background:rgba(255,255,255,0.07);border:1px solid var(--divider);border-radius:8px;overflow:hidden;flex-shrink:0;margin-left:14px;}
+html[dir="rtl"] .lang-btn{margin-left:0;margin-right:14px;}
+.lang-opt{padding:7px 14px;font-size:12px;font-weight:600;color:var(--gray);cursor:pointer;border:none;background:none;font-family:inherit;transition:all .18s;}
+.lang-opt.active{background:var(--blue);color:#fff;}
+
+/* SHARED */
+.pt-nav{padding-top:68px;}
+.max-w{max-width:1180px;margin:0 auto;}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;display:block;}
+.eyebrow.teal{color:var(--teal);}.eyebrow.amber{color:var(--amber);}
+h2.sh{font-family:var(--fd);font-size:clamp(28px,3.5vw,44px);font-weight:700;line-height:1.12;letter-spacing:-.015em;color:#fff;margin-bottom:14px;}
+p.lead{font-size:16px;line-height:1.7;color:var(--gray);max-width:620px;}
+p.bt{font-size:14.5px;line-height:1.75;color:var(--gray);}
+.divl{border:none;border-top:1px solid var(--divider);}
+.card{background:var(--card);border:1px solid var(--divider);border-radius:var(--r);padding:28px;transition:background .2s,border-color .2s;}
+.card:hover{background:var(--card-h);border-color:rgba(59,130,246,.2);}
+.card-ta{border-top:3px solid var(--blue);}.card-ta.teal{border-top-color:var(--teal);}
+.tag{display:inline-flex;align-items:center;height:24px;padding:0 11px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
+.tag-blue{background:var(--blue-dim);color:#7eb8f8;}.tag-teal{background:var(--teal-dim);color:#4dd4a8;}
+.tag-amber{background:var(--amber-dim);color:#fbbf24;}.tag-soon{background:rgba(120,80,220,.14);color:#a78bfa;}
+.cklist{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:14px;}
+.cklist li{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;line-height:1.6;color:var(--gray-l);}
+.cklist li::before{content:'';flex-shrink:0;width:7px;height:7px;border-radius:50%;margin-top:6px;background:var(--blue);}
+.cklist.teal li::before{background:var(--teal);}.cklist.amber li::before{background:var(--amber);}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:50px;padding:0 30px;border-radius:9px;border:none;cursor:pointer;font-family:var(--fb);font-size:14.5px;font-weight:600;text-decoration:none;transition:all .18s;}
+.btn-white{background:#fff;color:#0a0d18;}.btn-white:hover{opacity:.9;transform:translateY(-1px);}
+.btn-glass{background:rgba(41,57,110,.65);color:#7ea9f5;border:1px solid rgba(120,160,245,.2);backdrop-filter:blur(4px);}
+.btn-glass:hover{background:rgba(55,80,140,.75);transform:translateY(-1px);}
+.btn-blue{background:var(--blue);color:#fff;}.btn-blue:hover{opacity:.88;transform:translateY(-1px);}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden;background-image:url('/images/hero.jpg');background-size:cover;background-position:center;background-repeat:no-repeat;}
+.hero-body{flex:1;display:flex;align-items:center;position:relative;}
+.hero-glow{position:absolute;right:0;top:0;bottom:0;width:70%;background:radial-gradient(ellipse at 80% 50%,rgba(55,30,160,.36) 0%,rgba(20,10,60,.18) 50%,transparent 72%);pointer-events:none;}
+html[dir="rtl"] .hero-glow{right:auto;left:0;background:radial-gradient(ellipse at 20% 50%,rgba(55,30,160,.36) 0%,rgba(20,10,60,.18) 50%,transparent 72%);}
+
+
+.hero-fade{position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--bg),transparent);pointer-events:none;}
+.hero-content{position:relative;z-index:2;padding:0 72px;max-width:720px;}
+.hero-content h1{font-family:var(--fd);font-size:clamp(50px,6.2vw,88px);font-weight:800;line-height:1.04;letter-spacing:-.02em;color:#000000;margin-bottom:22px;}
+.hero-content .lead{margin-bottom:44px;}
+.hero-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.hero-stats{background:rgba(13,21,37,.7);border-top:1px solid var(--divider);backdrop-filter:blur(8px);padding:24px 72px;display:flex;gap:0;position:relative;z-index:2;}
+.stat-item{flex:1;padding:0 24px;text-align:center;border-right:1px solid var(--divider);}
+html[dir="rtl"] .stat-item{border-right:1px solid var(--divider);border-left:none;}
+html[dir="ltr"] .stat-item{border-left:1px solid var(--divider);border-right:none;}
+.stat-item:first-child{padding-left:0;text-align:left;border-left:none;}
+html[dir="rtl"] .stat-item:first-child{padding-right:0;padding-left:24px;text-align:right;border-right:none;border-left:none;}
+.stat-item:last-child{border:none;}
+.stat-val{font-family:var(--fd);font-size:28px;font-weight:800;color:#fff;display:block;}
+.stat-lbl{font-size:11.5px;color:var(--gray);margin-top:3px;display:block;}
+
+/* PAGE HERO */
+.phero{background:linear-gradient(135deg,#0a0f1d 0%,#0f1428 60%,#12103a 100%);border-bottom:1px solid var(--divider);padding:64px;position:relative;overflow:hidden;}
+.phero::after{content:'';position:absolute;top:-100px;right:-80px;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,rgba(55,30,160,.2) 0%,transparent 70%);pointer-events:none;}
+html[dir="rtl"] .phero::after{right:auto;left:-80px;}
+.phero .max-w{position:relative;z-index:1;}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center;padding:68px 64px;}
+.about-tag{display:inline-flex;align-items:center;gap:7px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:24px;padding:5px 14px;font-size:11.5px;font-weight:600;color:var(--teal);margin-bottom:16px;}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:0 64px 68px;}
+.pillar{background:var(--card);border:1px solid var(--divider);border-radius:var(--r);padding:24px;}
+.pillar-icon{font-size:24px;margin-bottom:10px;display:block;}
+.pillar h4{font-family:var(--fd);font-size:14.5px;font-weight:700;color:#fff;margin-bottom:7px;}
+.pillar p{font-size:12.5px;line-height:1.65;color:var(--gray);}
+.hub-strip{background:linear-gradient(90deg,rgba(59,130,246,.08),rgba(16,185,129,.06));border-top:1px solid var(--divider);border-bottom:1px solid var(--divider);padding:34px 64px;display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap;}
+.hub-badge{flex-shrink:0;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25);border-radius:10px;padding:10px 20px;font-family:var(--fd);font-size:13.5px;font-weight:700;color:#7eb8f8;white-space:nowrap;}
+
+/* SERVICES */
+.svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:0 64px 68px;}
+.svc-card{background:var(--card);border:1px solid var(--divider);border-radius:var(--r);padding:32px;position:relative;transition:border-color .2s,background .2s;}
+.svc-card:hover{background:var(--card-h);border-color:rgba(59,130,246,.22);}
+.svc-card.coming{border-style:dashed;border-color:rgba(167,139,250,.22);}
+.svc-card.coming:hover{border-color:rgba(167,139,250,.38);}
+.svc-num{font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--gray);margin-bottom:8px;display:block;}
+.svc-card h3{font-family:var(--fd);font-size:21px;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.25;}
+.svc-card>p{font-size:13.5px;line-height:1.7;color:var(--gray);margin-bottom:16px;}
+.svc-icon{position:absolute;top:28px;font-size:30px;opacity:.45;}
+html[dir="ltr"] .svc-icon{right:28px;}html[dir="rtl"] .svc-icon{left:28px;}
+.consult{padding:0 64px 68px;}
+.consult-inner{background:linear-gradient(135deg,rgba(13,21,37,.9),rgba(17,25,48,.9));border:1px solid var(--divider);border-radius:var(--r);padding:42px;}
+.consult-inner h3{font-family:var(--fd);font-size:21px;font-weight:700;color:#fff;margin-bottom:8px;}
+.consult-inner>p{font-size:13.5px;color:var(--gray);margin-bottom:22px;}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.ci{background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.12);border-radius:10px;padding:14px 16px;display:flex;align-items:flex-start;gap:9px;}
+.ci-icon{font-size:17px;flex-shrink:0;margin-top:1px;}
+.ci p{font-size:13px;line-height:1.55;color:var(--gray-l);}
+
+/* PRODUCTS */
+.prod-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:0 64px 68px;}
+.prod-card{background:var(--card);border:1px solid var(--divider);border-radius:var(--r);overflow:hidden;transition:border-color .2s,background .2s;}
+.prod-card:hover{background:var(--card-h);border-color:rgba(16,185,129,.25);}
+.prod-top{height:160px;display:flex;align-items:center;justify-content:center;font-size:64px;}
+.prod-top.tb{background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(5,80,60,.15));border-bottom:1px solid rgba(16,185,129,.12);}
+.prod-top.bb{background:linear-gradient(135deg,rgba(59,130,246,.10),rgba(20,40,120,.15));border-bottom:1px solid rgba(59,130,246,.12);}
+.prod-body{padding:26px;}
+.prod-num{font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);margin-bottom:7px;display:block;}
+.prod-body h3{font-family:var(--fd);font-size:18px;font-weight:700;color:#fff;margin-bottom:8px;line-height:1.25;}
+.prod-body>p{font-size:13.5px;line-height:1.65;color:var(--gray);margin-bottom:14px;}
+.why-box{background:linear-gradient(135deg,rgba(16,185,129,.07),rgba(13,21,37,.9));border:1px solid rgba(16,185,129,.15);border-radius:var(--r);padding:40px;margin:0 64px 68px;}
+.why-box h3{font-family:var(--fd);font-size:21px;font-weight:700;color:#fff;margin-bottom:8px;}
+.why-box>p{font-size:13.5px;color:var(--gray);max-width:660px;margin-bottom:20px;}
+.why-chips{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.wc{text-align:center;padding:16px;border-radius:10px;}
+.wc1{background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.12);}
+.wc2{background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.12);}
+.wc3{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.12);}
+.wc-icon{font-size:28px;margin-bottom:7px;}
+.wc h4{font-family:var(--fd);font-size:13.5px;font-weight:700;color:#fff;margin-bottom:3px;}
+.wc p{font-size:11.5px;color:var(--gray);}
+
+/* ARTICLES */
+.art-layout{padding:44px 64px 68px;display:grid;grid-template-columns:1fr 300px;gap:40px;align-items:start;}
+.art-feed{display:flex;flex-direction:column;gap:22px;}
+.art-card{background:var(--card);border:1px solid var(--divider);border-radius:var(--r);padding:28px;cursor:pointer;transition:border-color .2s,background .2s;}
+.art-card:hover{background:var(--card-h);border-color:rgba(59,130,246,.22);}
+.art-meta{display:flex;align-items:center;gap:9px;margin-bottom:12px;flex-wrap:wrap;}
+.art-date{font-size:11.5px;color:var(--gray);font-weight:500;}
+.art-card h3{font-family:var(--fd);font-size:17px;font-weight:700;color:#fff;margin-bottom:9px;line-height:1.3;}
+.art-exc{font-size:13.5px;line-height:1.7;color:var(--gray);margin-bottom:16px;}
+.art-author{display:flex;align-items:center;gap:9px;padding-top:14px;border-top:1px solid var(--divider);}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#1e4fa0,#10b981);display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:#fff;flex-shrink:0;}
+.author-info{display:flex;flex-direction:column;}
+.author-name{font-size:12.5px;font-weight:600;color:#fff;}
+.author-role{font-size:11px;color:var(--gray);}
+.read-link{font-size:12.5px;font-weight:600;color:var(--blue);margin-inline-start:auto;}
+.art-sidebar{display:flex;flex-direction:column;gap:16px;}
+.sidebar-card{background:var(--card);border:1px solid var(--divider);border-radius:var(--r);padding:20px;}
+.sidebar-card h4{font-family:var(--fd);font-size:13px;font-weight:700;color:#fff;margin-bottom:11px;}
+.topic-tag{display:inline-flex;margin:2px;padding:4px 10px;border-radius:16px;font-size:10.5px;font-weight:600;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.18);color:#7eb8f8;cursor:pointer;transition:background .15s;}
+.topic-tag:hover{background:rgba(59,130,246,.2);}
+
+/* FULL ARTICLE */
+.art-full{display:none;padding:48px 64px 68px;}
+.art-full.open{display:block;}
+.art-full-inner{max-width:760px;}
+.back-btn{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--blue);cursor:pointer;margin-bottom:28px;background:none;border:none;font-family:inherit;transition:opacity .2s;}
+.back-btn:hover{opacity:.7;}
+.art-full h1{font-family:var(--fd);font-size:clamp(20px,2.8vw,32px);font-weight:800;line-height:1.2;letter-spacing:-.015em;color:#fff;margin-bottom:16px;}
+.art-full-meta{display:flex;align-items:center;gap:12px;margin-bottom:28px;padding-bottom:22px;border-bottom:1px solid var(--divider);flex-wrap:wrap;}
+.art-full-body h2{font-family:var(--fd);font-size:19px;font-weight:700;color:#fff;margin:26px 0 9px;}
+.art-full-body p{font-size:14.5px;line-height:1.8;color:rgba(255,255,255,.7);margin-bottom:14px;}
+.art-full-body ul{margin:7px 0 16px;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px;}
+.art-full-body ul li{display:flex;gap:8px;font-size:14px;line-height:1.65;color:rgba(255,255,255,.67);}
+.art-full-body ul li::before{content:'';flex-shrink:0;width:7px;height:7px;border-radius:50%;background:var(--blue);margin-top:7px;}
+.refs{margin-top:32px;padding:20px;background:var(--card);border-radius:10px;border:1px solid var(--divider);}
+.refs h4{font-size:11.5px;font-weight:700;color:var(--gray);margin-bottom:9px;text-transform:uppercase;letter-spacing:.08em;}
+.refs ol{padding-inline-start:18px;}
+.refs ol li{font-size:11.5px;line-height:1.6;color:var(--gray);margin-bottom:4px;}
+.hashtag-row{display:flex;flex-wrap:wrap;gap:7px;margin:18px 0;}
+.ht{font-size:11.5px;color:var(--blue);font-weight:500;}
+
+/* FOOTER */
+.footer{background:#040609;border-top:1px solid var(--divider);padding:28px 64px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+.flogo{display:flex;align-items:center;gap:8px;}
+.flogo-text{font-family:var(--fd);font-size:13px;font-weight:700;color:var(--gray);letter-spacing:.05em;}
+.fcopy{font-size:11.5px;color:rgba(255,255,255,.27);}
+.flinks{display:flex;gap:18px;list-style:none;}
+.flinks a{font-size:11.5px;color:rgba(255,255,255,.33);text-decoration:none;cursor:pointer;transition:color .2s;}
+.flinks a:hover{color:rgba(255,255,255,.7);}
+
+/* DASHBOARD */
+#page-dashboard{background:#F0F2F5;color:#2C3E50;}
+.dwrap{max-width:1260px;margin:0 auto;padding:16px 20px;display:flex;flex-direction:column;gap:16px;font-family:'Inter',sans-serif;}
+.dcard{background:#fff;border-radius:15px;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #f0f0f0;padding:20px;}
+.dcard-head{display:flex;align-items:center;gap:7px;margin-bottom:13px;flex-wrap:wrap;}
+.dcard-head h2{font-size:16px;font-weight:700;color:#2C3E50;}
+.dcard-head .dsub{font-size:11.5px;color:#7F8C8D;}
+.daccent{height:4px;background:linear-gradient(to right,#4A90D9,#27AE60,#E8833A);border-radius:15px 15px 0 0;margin:-20px -20px 16px;}
+html[dir="rtl"] .daccent{background:linear-gradient(to left,#4A90D9,#27AE60,#E8833A);}
+.dtitle{font-size:clamp(18px,3vw,28px);font-weight:800;color:#2C3E50;margin-bottom:7px;text-align:center;}
+.dbrow{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:11px;}
+.dbadge{display:inline-flex;align-items:center;gap:4px;padding:5px 11px;border-radius:99px;font-size:11px;font-weight:600;}
+.dbb{background:rgba(74,144,217,.1);color:#4A90D9;}
+.dbg{background:rgba(39,174,96,.1);color:#27AE60;}
+.dbo{background:rgba(232,131,58,.1);color:#E8833A;}
+.dleg-wrap{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;}
+.dleg-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:99px;font-size:10px;font-weight:700;color:#fff;cursor:default;transition:transform .15s;}
+.dleg-chip:hover{transform:scale(1.06);}
+.dg4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;}
+.dsc{background:#fff;border-radius:11px;border:2px solid #f0f0f0;padding:14px;cursor:pointer;transition:all .2s;}
+.dsc:hover,.dsc.da{border-color:#4A90D9;box-shadow:0 4px 14px rgba(74,144,217,.13);}
+.dsc-lbl{font-size:11.5px;font-weight:700;color:#4A90D9;}
+.dsc-val{font-size:24px;font-weight:800;color:#2C3E50;line-height:1;}
+.dsc-cls{font-size:12px;font-weight:600;}
+.dsc-date{font-size:10px;color:#7F8C8D;margin-top:2px;}
+.dsc-bg{margin-top:8px;height:4px;border-radius:4px;background:#f0f0f0;}
+.dsc-bar{height:4px;border-radius:4px;transition:width .5s;}
+.dsg{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:14px;}
+.dsg label{font-size:10.5px;font-weight:600;color:#7F8C8D;display:block;margin-bottom:3px;}
+.dsg select{width:100%;padding:7px 10px;border-radius:8px;border:1px solid #e5e7eb;background:#F8F9FA;color:#2C3E50;font-size:12px;font-family:inherit;outline:none;transition:border-color .2s;}
+.dsg select:focus{border-color:#4A90D9;box-shadow:0 0 0 3px rgba(74,144,217,.1);}
+.dres{padding:14px;border-radius:10px;background:#F8F9FA;border:2px solid #f0f0f0;display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+.dri{text-align:center;}
+.dri-lbl{font-size:10px;color:#7F8C8D;margin-bottom:2px;}
+.dri-val{font-size:17px;font-weight:700;color:#2C3E50;}
+.dri-cls{font-size:13px;font-weight:700;}
+.dvdiv{width:1px;height:38px;background:#e5e7eb;}
+.dspi-tog{display:flex;gap:3px;background:#F0F2F5;border-radius:10px;padding:3px;}
+.dspi-btn{padding:5px 11px;border-radius:7px;font-size:12px;font-weight:500;background:none;border:none;cursor:pointer;color:#7F8C8D;font-family:inherit;transition:all .18s;}
+.dspi-btn.da{background:#fff;color:#4A90D9;box-shadow:0 1px 4px rgba(0,0,0,.09);}
+.dchart{border-radius:10px;overflow:hidden;background:#F8F9FA;padding:5px;}
+.dchart img{width:100%;height:auto;border-radius:7px;display:block;}
+.dg2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.dhm-scroll{overflow-x:auto;}
+table.dhm{border-collapse:collapse;min-width:500px;width:100%;}
+table.dhm th{font-size:10px;color:#7F8C8D;font-weight:600;padding:3px;text-align:center;}
+table.dhm td{padding:1.5px;}
+.dhm-cell{width:100%;height:22px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:7.5px;font-weight:700;color:#fff;cursor:default;transition:transform .15s;}
+.dhm-cell:hover{transform:scale(1.15);z-index:1;position:relative;}
+.dhm-cell.de{background:#f0f0f0;color:#ccc;}
+.dhm-year{font-size:10px;font-weight:700;color:#2C3E50;text-align:center;padding:2px 3px;}
+.dhm-leg{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;justify-content:center;}
+.dhml{display:flex;align-items:center;gap:3px;}
+.dhml-dot{width:8px;height:8px;border-radius:2px;}
+.dhml-lbl{font-size:9px;color:#7F8C8D;}
+.ddb-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.ddb-lbl{width:88px;flex-shrink:0;}
+html[dir="ltr"] .ddb-lbl{text-align:left;}html[dir="rtl"] .ddb-lbl{text-align:right;}
+.ddb-lbl .dl1{font-size:10px;font-weight:600;color:#2C3E50;}
+.ddb-lbl .dl2{font-size:8.5px;color:#7F8C8D;}
+.ddb-bg{flex:1;background:#F0F2F5;border-radius:99px;height:22px;overflow:hidden;}
+.ddb-fill{height:100%;border-radius:99px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;transition:width .6s;}
+.ddb-fill span{font-size:8px;font-weight:700;color:#fff;}
+.ddb-cnt{width:20px;font-size:12px;font-weight:700;color:#2C3E50;text-align:center;flex-shrink:0;}
+table.dperf{width:100%;border-collapse:collapse;font-size:12px;}
+table.dperf th{padding:8px 6px;color:#7F8C8D;font-weight:600;border-bottom:2px solid #f0f0f0;}
+table.dperf td{padding:6px;border-bottom:1px solid #f8f8f8;text-align:center;}
+table.dperf tr:hover td{background:#F8F9FA;}
+.rg{color:#27AE60;font-weight:700;}.rm{color:#F39C12;font-weight:700;}.rb{color:#E74C3C;font-weight:700;}
+.dabox{padding:14px;border-radius:10px;margin-bottom:11px;}
+.dabox h3{font-size:14px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:5px;}
+.dabox ul{list-style:none;}
+.dabox ul li{font-size:12px;line-height:1.7;color:#2C3E50;display:flex;gap:6px;margin-bottom:6px;}
+.dabox ul li::before{content:"●";flex-shrink:0;margin-top:1px;}
+.dab1{background:rgba(74,144,217,.05);border:1px solid rgba(74,144,217,.1);}
+.dab1 h3,.dab1 ul li::before{color:#4A90D9;}
+.dab2{background:rgba(231,76,60,.05);border:1px solid rgba(231,76,60,.1);}
+.dab2 h3,.dab2 ul li::before{color:#E74C3C;}
+.dab3{background:rgba(39,174,96,.05);border:1px solid rgba(39,174,96,.1);}
+.dab3 h3,.dab3 ul li::before{color:#27AE60;}
+.dgbtn{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:none;cursor:pointer;padding:0;font-family:inherit;}
+.dgsteps{margin-top:16px;display:flex;flex-direction:column;gap:9px;}
+.dgstep{display:flex;gap:10px;padding:11px;border-radius:10px;background:#F8F9FA;transition:background .18s;}
+.dgstep:hover{background:#F0F2F5;}
+.dgnum{width:30px;height:30px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;}
+.dgbody h3{font-size:12.5px;font-weight:700;color:#2C3E50;margin-bottom:2px;}
+.dgbody p{font-size:12px;color:#7F8C8D;line-height:1.6;}
+.ddsg{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;}
+.ddsc{padding:14px;border-radius:10px;background:#F8F9FA;border:1px solid #f0f0f0;}
+.ddsc h3{font-size:12.5px;font-weight:700;margin-bottom:7px;display:flex;align-items:center;gap:4px;}
+.ddsc ul{list-style:none;}
+.ddsc ul li{font-size:11.5px;color:#7F8C8D;margin-bottom:3px;}
+.dhidden{display:none!important;}
+
+/* ANIM */
+.fu{opacity:0;transform:translateY(16px);animation:fuA .65s ease forwards;}
+.fu:nth-child(1){animation-delay:.08s;}
+.fu:nth-child(2){animation-delay:.18s;}
+.fu:nth-child(3){animation-delay:.28s;}
+@keyframes fuA{to{opacity:1;transform:translateY(0);}}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .nav{padding:0 24px;}
+  .nav-links li a{padding:0 13px;font-size:13px;}
+  .hero-content,.hero-stats,.phero,.about-grid,.pillars,.hub-strip,.svc-grid,.consult,.prod-grid,.why-box,.art-layout,.art-full,.footer{padding-left:24px!important;padding-right:24px!important;}
+  .g2,.g3,.dg2,.dg4,.about-grid,.pillars,.svc-grid,.prod-grid,.dsg,.ddsg,.why-chips,.cg{grid-template-columns:1fr 1fr;}
+  .art-layout{grid-template-columns:1fr;}
+  .hero-stats{padding:18px 24px!important;flex-wrap:wrap;}
+  .stat-item{min-width:120px;border:none!important;padding:6px 0!important;}
+}
+@media(max-width:620px){
+  h2.sh{font-size:24px;}.hero-content h1{font-size:42px;}
+  .hero-actions{flex-direction:column;align-items:flex-start;}
+  .btn{width:100%;justify-content:center;}
+  .g2,.g3,.dg4,.ddsg,.dsg,.why-chips,.cg,.pillars,.svc-grid,.prod-grid{grid-template-columns:1fr;}
+  .nav-links{display:none;}
+}
+
+
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-logo" onclick="showPage('home')">
+    <svg class="nav-logo-icon" viewBox="0 0 26 26" fill="none">
+      <path d="M13 23C13 23 7.5 17 7.5 10.5C7.5 7 10 4.5 13 4.5C16 4.5 18.5 7 18.5 10.5C18.5 17 13 23 13 23Z" fill="none" stroke="#5fa88c" stroke-width="1.1"/>
+      <path d="M13 15.5C11 13.5 7.5 9.5 8.5 5.5C8.5 5.5 12 7.5 13 11.5" fill="#4d9a7d" opacity=".85"/>
+      <path d="M13 13.5C15 11.5 18.5 7.5 17.5 3.5C17.5 3.5 14 5.5 13 9.5" fill="#3d8a6d" opacity=".8"/>
+      <line x1="13" y1="4.5" x2="13" y2="23" stroke="#6ab89e" stroke-width="1.1" stroke-linecap="round"/>
+      <path d="M13 9C11 7.5 9.5 6 10 4C10 4 12.5 5.5 12.5 8" fill="#7dccb0" opacity=".75"/>
+      <path d="M13 7C15 5.5 16.5 4 16 2C16 2 13.5 3.5 13.5 6.5" fill="#6abfa3" opacity=".7"/>
+    </svg>
+    <span class="nav-logo-text">ENLIL AI</span>
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li class="active" data-page="home"><a onclick="showPage('home')" data-en="Home" data-ar="الرئيسية">Home</a></li>
+    <li data-page="about"><a onclick="showPage('about')" data-en="About Us" data-ar="من نحن">About Us</a></li>
+    <li data-page="services"><a onclick="showPage('services')" data-en="Services" data-ar="الخدمات">Services</a></li>
+    <li data-page="articles"><a onclick="showPage('articles')" data-en="Articles" data-ar="المقالات">Articles</a></li>
+    <li data-page="products"><a onclick="showPage('products')" data-en="Products" data-ar="المنتجات">Products</a></li>
+    <li data-page="dashboard"><a onclick="showPage('dashboard')" data-en="Dashboard" data-ar="لوحة البيانات">Dashboard</a></li>
+  </ul>
+  <div class="lang-btn">
+    <button class="lang-opt" id="btn-ar" onclick="setLang('ar')">ع</button>
+    <button class="lang-opt active" id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
+</nav>
+
+<div class="page active pt-nav" id="page-home">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="hero-glow"></div><div class="hero-circle"></div>
+      <div class="hero-content">
+        <h1 class="fu" data-en="Predict First, Then Protect." data-ar="تنبأ أولاً، ثم احمِ.">Predict First, Then Protect.</h1>
+        <p class="lead" style="color:#000000;" class="lead fu" data-en="Iraq's Platform for Forecasting Floods and Drought" data-ar="منصة العراق للتنبؤ بالفيضانات والجفاف">Iraq's Platform for Forecasting Floods and Drought</p>
+        <div class="hero-actions fu">
+          <a class="btn btn-white" onclick="showPage('products')" data-en="Products" data-ar="المنتجات">Products</a>
+          <a class="btn btn-glass" onclick="showPage('services')" data-en="Services" data-ar="الخدمات">Services</a>
+        </div>
+      </div>
+      <div class="hero-fade"></div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><span class="stat-val">2030</span><span class="stat-lbl" data-en="Long-term forecast horizon" data-ar="أفق التنبؤ بعيد المدى">Long-term forecast horizon</span></div>
+      <div class="stat-item"><span class="stat-val" data-en="Baghdad" data-ar="بغداد">Baghdad</span><span class="stat-lbl" data-en="Current coverage" data-ar="التغطية الحالية">Current coverage</span></div>
+      <div class="stat-item"><span class="stat-val">3</span><span class="stat-lbl" data-en="Drought · Rainfall · Flood" data-ar="جفاف · أمطار · فيضان">Drought · Rainfall · Flood</span></div>
+      <div class="stat-item"><span class="stat-val">Computiq</span><span class="stat-lbl" data-en="Powered by" data-ar="مشغل بواسطة">Powered by</span></div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="flogo"><svg width="18" height="18" viewBox="0 0 26 26" fill="none"><path d="M13 23C13 23 7.5 17 7.5 10.5C7.5 7 10 4.5 13 4.5C16 4.5 18.5 7 18.5 10.5C18.5 17 13 23 13 23Z" fill="none" stroke="#5fa88c" stroke-width="1.1"/><line x1="13" y1="4.5" x2="13" y2="23" stroke="#6ab89e" stroke-width="1.1" stroke-linecap="round"/></svg><span class="flogo-text">ENLIL AI</span></div>
+    <span class="fcopy" data-en="© 2025 ENLIL AI. Powered by Computiq. Baghdad, Iraq." data-ar="© 2025 ENLIL AI. مشغل بواسطة Computiq. بغداد، العراق.">© 2025 ENLIL AI. Powered by Computiq. Baghdad, Iraq.</span>
+    <ul class="flinks"><li><a onclick="showPage('about')" data-en="About" data-ar="من نحن">About</a></li><li><a onclick="showPage('services')" data-en="Services" data-ar="الخدمات">Services</a></li><li><a onclick="showPage('products')" data-en="Products" data-ar="المنتجات">Products</a></li></ul>
+  </footer>
+</div>
+
+<!-- ABOUT -->
+<div class="page pt-nav" id="page-about">
+  <div class="phero"><div class="max-w">
+    <span class="eyebrow teal" data-en="About Us" data-ar="من نحن">About Us</span>
+    <h2 class="sh" data-en="Climate Intelligence for Iraq's Farmlands" data-ar="ذكاء مناخي لأراضي العراق الزراعية">Climate Intelligence for Iraq's Farmlands</h2>
+    <p class="lead" data-en="A company supported by Hub200, developing intelligent solutions for predicting drought, rainfall, and flood seasons in Iraq." data-ar="شركة مدعومة من Hub200 تطور حلولاً ذكية للتنبؤ بمواسم الجفاف والأمطار والفيضانات في العراق.">A company supported by Hub200, developing intelligent solutions for predicting drought, rainfall, and flood seasons in Iraq.</p>
+  </div></div>
+  <div class="about-grid max-w">
+    <div>
+      <div class="about-tag">🌱 <span data-en="Supported by Hub200" data-ar="مدعوم من Hub200">Supported by Hub200</span></div>
+      <h2 class="sh" data-en="Who We Are" data-ar="من نحن">Who We Are</h2>
+      <p class="bt" style="margin-bottom:13px;" data-en="We develop intelligent solutions for predicting drought, rainfall, and flood seasons in Iraq using predictive models and climate data analysis." data-ar="نطور حلولاً ذكية للتنبؤ بمواسم الجفاف والأمطار والفيضانات في العراق باستخدام نماذج تنبؤية وتحليل بيانات المناخ.">We develop intelligent solutions for predicting drought, rainfall, and flood seasons in Iraq using predictive models and climate data analysis.</p>
+      <p class="bt" style="margin-bottom:13px;" data-en="Currently our model focuses on Baghdad Governorate with long-term forecasting until 2030." data-ar="حاليًا يركز نموذجنا على محافظة بغداد ويوفر توقعات طويلة المدى حتى عام 2030.">Currently our model focuses on Baghdad Governorate with long-term forecasting until 2030.</p>
+      <p class="bt" data-en="Our goal is to help farmers and agricultural landowners understand potential drought, rainfall, and flood seasons to better protect their lands and improve agricultural planning." data-ar="هدفنا مساعدة المزارعين وملاك الأراضي على فهم المواسم المناخية المحتملة لحماية أراضيهم وتحسين التخطيط الزراعي.">Our goal is to help farmers and agricultural landowners understand potential drought, rainfall, and flood seasons to better protect their lands and improve agricultural planning.</p>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <span class="eyebrow" data-en="Our Vision" data-ar="رؤيتنا">Our Vision</span>
+        <p class="bt" data-en="We aim to build a smart system delivering alerts and climate analysis to help Iraq's agricultural sector adapt to climate change and reduce environmental risks." data-ar="نهدف إلى بناء نظام ذكي يقدم تنبيهات وتحليلات مناخية تساعد القطاع الزراعي العراقي على التكيف مع التغير المناخي وتقليل المخاطر البيئية.">We aim to build a smart system delivering alerts and climate analysis to help Iraq's agricultural sector adapt to climate change and reduce environmental risks.</p>
+      </div>
+      <div class="card card-ta teal">
+        <span class="eyebrow teal" data-en="Current Focus" data-ar="التركيز الحالي">Current Focus</span>
+        <p class="bt" style="margin-bottom:11px;" data-en="Baghdad Governorate — long-term seasonal forecasting to 2030." data-ar="محافظة بغداد — توقعات موسمية طويلة المدى حتى 2030.">Baghdad Governorate — long-term seasonal forecasting to 2030.</p>
+        <ul class="cklist teal">
+          <li data-en="Drought season prediction" data-ar="التنبؤ بمواسم الجفاف">Drought season prediction</li>
+          <li data-en="Rainfall season prediction" data-ar="التنبؤ بمواسم الأمطار">Rainfall season prediction</li>
+          <li data-en="Flood risk forecasting" data-ar="التنبؤ بمخاطر الفيضانات">Flood risk forecasting</li>
+          <li data-en="Agricultural planning support" data-ar="دعم التخطيط الزراعي">Agricultural planning support</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <hr class="divl"/>
+  <div style="padding:44px 64px 14px;">
+    <span class="eyebrow" data-en="Our Pillars" data-ar="ركائزنا">Our Pillars</span>
+    <h2 class="sh" data-en="What Drives Us" data-ar="ما يدفعنا للأمام">What Drives Us</h2>
+  </div>
+  <div class="pillars" style="padding-top:6px;">
+    <div class="pillar"><span class="pillar-icon">🔬</span><h4 data-en="Predictive Science" data-ar="العلم التنبؤي">Predictive Science</h4><p data-en="We use climate data and predictive models to give Iraq's farming communities the foresight they need before disaster strikes." data-ar="نستخدم تحليل البيانات المناخية والنماذج التنبؤية لمنح مجتمعات الزراعة العراقية الاستبصار الذي تحتاجه.">We use climate data and predictive models to give Iraq's farming communities the foresight they need before disaster strikes.</p></div>
+    <div class="pillar"><span class="pillar-icon">🌾</span><h4 data-en="Farmer-First Design" data-ar="المزارع أولاً">Farmer-First Design</h4><p data-en="Every solution is designed around the real needs of agricultural landowners in Iraq — practical, accessible, and actionable." data-ar="كل حل نبنيه مصمم حول الاحتياجات الحقيقية لملاك الأراضي الزراعية في العراق — عملي وقابل للوصول.">Every solution is designed around the real needs of agricultural landowners in Iraq — practical, accessible, and actionable.</p></div>
+    <div class="pillar"><span class="pillar-icon">♻️</span><h4 data-en="Sustainable Innovation" data-ar="الابتكار المستدام">Sustainable Innovation</h4><p data-en="From solar water systems to recycled-plastic vertical farms, we embed sustainability into every product." data-ar="من أنظمة المياه الشمسية إلى المزارع العمودية المعاد تدويرها، نضع الاستدامة في صميم كل منتج.">From solar water systems to recycled-plastic vertical farms, we embed sustainability into every product.</p></div>
+    <div class="pillar"><span class="pillar-icon">🌍</span><h4 data-en="Climate Resilience" data-ar="المرونة المناخية">Climate Resilience</h4><p data-en="We help Iraq's agricultural sector adapt to climate change and reduce environmental risks through data-driven intelligence." data-ar="نساعد القطاع الزراعي العراقي على التكيف مع التغير المناخي وتقليل المخاطر البيئية.">We help Iraq's agricultural sector adapt to climate change and reduce environmental risks through data-driven intelligence.</p></div>
+    <div class="pillar"><span class="pillar-icon">📡</span><h4 data-en="Smart Alerts" data-ar="التنبيهات الذكية">Smart Alerts</h4><p data-en="Timely alerts via WhatsApp and instant notifications ensure farmers receive warnings before critical climate events." data-ar="تنبيهات في الوقت المناسب عبر واتساب والإشعارات الفورية تضمن وصول التحذيرات قبل الأحداث المناخية.">Timely alerts via WhatsApp and instant notifications ensure farmers receive warnings before critical climate events.</p></div>
+    <div class="pillar"><span class="pillar-icon">🏗️</span><h4 data-en="Engineering Consultation" data-ar="الاستشارات الهندسية">Engineering Consultation</h4><p data-en="Tailored engineering and agricultural consulting to help landowners protect and optimize their lands for any season." data-ar="استشارات هندسية وزراعية مخصصة تساعد الملاك على حماية أراضيهم وتحسينها لكل موسم.">Tailored engineering and agricultural consulting to help landowners protect and optimize their lands for any season.</p></div>
+  </div>
+  <div class="hub-strip">
+    <div><h3 style="font-family:var(--fd);font-size:16px;font-weight:700;color:#fff;margin-bottom:5px;" data-en="Supported by Hub200" data-ar="مدعوم من Hub200">Supported by Hub200</h3><p class="bt" data-en="ENLIL AI is proudly supported by Hub200 — Iraq's leading startup accelerator." data-ar="ENLIL AI مدعومة بفخر من Hub200 — مسرّع الشركات الناشئة الرائد في العراق.">ENLIL AI is proudly supported by Hub200 — Iraq's leading startup accelerator.</p></div>
+    <div class="hub-badge">🚀 <span data-en="Hub200 Portfolio Company" data-ar="شركة Hub200">Hub200 Portfolio Company</span></div>
+  </div>
+  <footer class="footer"><div class="flogo"><svg width="18" height="18" viewBox="0 0 26 26" fill="none"><path d="M13 23C13 23 7.5 17 7.5 10.5C7.5 7 10 4.5 13 4.5C16 4.5 18.5 7 18.5 10.5C18.5 17 13 23 13 23Z" fill="none" stroke="#5fa88c" stroke-width="1.1"/><line x1="13" y1="4.5" x2="13" y2="23" stroke="#6ab89e" stroke-width="1.1" stroke-linecap="round"/></svg><span class="flogo-text">ENLIL AI</span></div><span class="fcopy" data-en="© 2025 ENLIL AI" data-ar="© 2025 ENLIL AI">© 2025 ENLIL AI</span><ul class="flinks"><li><a onclick="showPage('home')" data-en="Home" data-ar="الرئيسية">Home</a></li><li><a onclick="showPage('services')" data-en="Services" data-ar="الخدمات">Services</a></li></ul></footer>
+</div>
+
+<!-- SERVICES -->
+<div class="page pt-nav" id="page-services">
+  <div class="phero"><div class="max-w">
+    <span class="eyebrow" data-en="Services" data-ar="الخدمات">Services</span>
+    <h2 class="sh" data-en="Long-term Forecasting for Iraq's Seasons" data-ar="توقعات طويلة المدى لمواسم العراق">Long-term Forecasting for Iraq's Seasons</h2>
+    <p class="lead" data-en="We provide long-term predictions for drought seasons, rainfall seasons, and floods in Iraq." data-ar="نقدم توقعات طويلة المدى لمواسم الجفاف والأمطار والفيضانات في العراق.">We provide long-term predictions for drought seasons, rainfall seasons, and floods in Iraq.</p>
+  </div></div>
+  <div style="padding:44px 64px 18px;"><span class="eyebrow" data-en="What We Offer" data-ar="ما نقدمه">What We Offer</span><h2 class="sh" data-en="Our Services" data-ar="خدماتنا">Our Services</h2></div>
+  <div class="svc-grid">
+    <div class="svc-card">
+      <span class="svc-num" data-en="SERVICE 01" data-ar="الخدمة 01">SERVICE 01</span>
+      <span class="svc-icon">🌊</span>
+      <div class="tag tag-blue" style="margin-bottom:13px;" data-en="Available Now" data-ar="متاحة الآن">Available Now</div>
+      <h3 data-en="Long-term Forecasting for Iraq's Seasons" data-ar="توقعات طويلة المدى لمواسم العراق">Long-term Forecasting for Iraq's Seasons</h3>
+      <p data-en="We provide long-term predictions for drought, rainfall, and flood seasons. The system helps users understand seasonal climate patterns well in advance." data-ar="نقدم توقعات طويلة المدى لمواسم الجفاف والأمطار والفيضانات. يساعد النظام المستخدمين على فهم الأنماط المناخية الموسمية مسبقًا.">We provide long-term predictions for drought, rainfall, and flood seasons. The system helps users understand seasonal climate patterns well in advance.</p>
+      <ul class="cklist">
+        <li data-en="Whether upcoming seasons will experience drought or rainfall" data-ar="ما إذا كانت المواسم القادمة ستشهد جفافاً أم أمطاراً">Whether upcoming seasons will experience drought or rainfall</li>
+        <li data-en="Whether floods may occur at the beginning or end of winter" data-ar="ما إذا كانت الفيضانات ستقع في بداية أو نهاية الشتاء">Whether floods may occur at the beginning or end of winter</li>
+        <li data-en="Whether drought conditions may occur at the beginning or end of summer" data-ar="ما إذا كانت حالات الجفاف قد تحدث في بداية أو نهاية الصيف">Whether drought conditions may occur at the beginning or end of summer</li>
+        <li data-en="Long-term seasonal climate pattern analysis" data-ar="تحليل الأنماط المناخية الموسمية طويلة المدى">Long-term seasonal climate pattern analysis</li>
+      </ul>
+    </div>
+    <div class="svc-card coming">
+      <span class="svc-num" data-en="SERVICE 02 — COMING SOON" data-ar="الخدمة 02 — قريباً">SERVICE 02 — COMING SOON</span>
+      <span class="svc-icon">📲</span>
+      <div class="tag tag-soon" style="margin-bottom:13px;" data-en="In Development" data-ar="قيد التطوير">In Development</div>
+      <h3 data-en="Short-term Forecasting & Farmer Alerts" data-ar="توقعات قصيرة المدى وتنبيهات للمزارعين">Short-term Forecasting & Farmer Alerts</h3>
+      <p data-en="In the future, we plan to develop a short-term forecasting system for farmers to help them make confident day-to-day decisions." data-ar="سنطور نظام توقعات قصيرة المدى للمزارعين يساعدهم على اتخاذ قرارات يومية بثقة.">In the future, we plan to develop a short-term forecasting system for farmers to help them make confident day-to-day decisions.</p>
+      <ul class="cklist">
+        <li data-en="Predict possible rainfall days" data-ar="التنبؤ بأيام الأمطار المحتملة">Predict possible rainfall days</li>
+        <li data-en="Determine the best planting times" data-ar="تحديد أفضل أوقات الزراعة">Determine the best planting times</li>
+        <li data-en="Understand potential flood risks" data-ar="فهم مخاطر الفيضانات المحتملة">Understand potential flood risks</li>
+        <li data-en="Protect agricultural lands before climate disasters" data-ar="حماية الأراضي الزراعية قبل وقوع الكوارث المناخية">Protect agricultural lands before climate disasters</li>
+      </ul>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--divider);">
+        <p style="font-size:12.5px;color:var(--gray);margin-bottom:8px;font-weight:600;" data-en="Delivery methods:" data-ar="طرق الإرسال:">Delivery methods:</p>
+        <div style="display:flex;gap:7px;flex-wrap:wrap;">
+          <span class="tag tag-soon" data-en="📱 WhatsApp Alerts" data-ar="📱 تنبيهات واتساب">📱 WhatsApp Alerts</span>
+          <span class="tag tag-soon" data-en="🔔 Instant Notifications" data-ar="🔔 إشعارات فورية">🔔 Instant Notifications</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="consult">
+    <div class="consult-inner">
+      <span class="eyebrow amber" data-en="Also Coming Soon" data-ar="قريباً أيضاً">Also Coming Soon</span>
+      <h3 data-en="Engineering & Agricultural Consulting" data-ar="استشارات هندسية وزراعية">Engineering & Agricultural Consulting</h3>
+      <p data-en="Professional consulting services tailored to land type and climate challenges across Iraq." data-ar="خدمات استشارية احترافية مصممة وفق نوع الأرض والتحديات المناخية في العراق.">Professional consulting services tailored to land type and climate challenges across Iraq.</p>
+      <div class="cg">
+        <div class="ci"><span class="ci-icon">🛡️</span><p data-en="How to protect agricultural lands from floods" data-ar="كيفية حماية الأراضي الزراعية من الفيضانات">How to protect agricultural lands from floods</p></div>
+        <div class="ci"><span class="ci-icon">🌧️</span><p data-en="How to take advantage of rainy seasons efficiently" data-ar="كيفية الاستفادة من مواسم الأمطار بكفاءة">How to take advantage of rainy seasons efficiently</p></div>
+        <div class="ci"><span class="ci-icon">📐</span><p data-en="Land organization and agricultural management" data-ar="تنظيم الأراضي والإدارة الزراعية">Land organization and agricultural management</p></div>
+        <div class="ci"><span class="ci-icon">⚙️</span><p data-en="Customized engineering solutions depending on land type and climate challenges" data-ar="حلول هندسية مخصصة حسب نوع الأرض والتحديات المناخية">Customized engineering solutions depending on land type and climate challenges</p></div>
+      </div>
+    </div>
+  </div>
+  <footer class="footer"><div class="flogo"><svg width="18" height="18" viewBox="0 0 26 26" fill="none"><path d="M13 23C13 23 7.5 17 7.5 10.5C7.5 7 10 4.5 13 4.5C16 4.5 18.5 7 18.5 10.5C18.5 17 13 23 13 23Z" fill="none" stroke="#5fa88c" stroke-width="1.1"/><line x1="13" y1="4.5" x2="13" y2="23" stroke="#6ab89e" stroke-width="1.1" stroke-linecap="round"/></svg><span class="flogo-text">ENLIL AI</span></div><span class="fcopy" data-en="© 2025 ENLIL AI" data-ar="© 2025 ENLIL AI">© 2025 ENLIL AI</span><ul class="flinks"><li><a onclick="showPage('home')" data-en="Home" data-ar="الرئيسية">Home</a></li><li><a onclick="showPage('products')" data-en="Products" data-ar="المنتجات">Products</a></li></ul></footer>
+</div>
+
+<!-- PRODUCTS -->
+<div class="page pt-nav" id="page-products">
+  <div class="phero"><div class="max-w">
+    <span class="eyebrow teal" data-en="Products" data-ar="المنتجات">Products</span>
+    <h2 class="sh" data-en="Smart & Sustainable Agriculture Solutions" data-ar="حلول زراعية ذكية ومستدامة">Smart & Sustainable Agriculture Solutions</h2>
+    <p class="lead" data-en="We support smart and sustainable agriculture solutions that reduce water consumption and improve agricultural productivity in Iraq's challenging climate." data-ar="ندعم حلول الزراعة الذكية والمستدامة التي تقلل استهلاك المياه وتحسن الإنتاجية الزراعية في المناخ العراقي الصعب.">We support smart and sustainable agriculture solutions that reduce water consumption and improve agricultural productivity in Iraq's challenging climate.</p>
+  </div></div>
+  <div style="padding:44px 64px 18px;"><span class="eyebrow teal" data-en="Our Products" data-ar="منتجاتنا">Our Products</span><h2 class="sh" data-en="Built for Iraq's Climate" data-ar="مبنية لمناخ العراق">Built for Iraq's Climate</h2></div>
+  <div class="prod-grid">
+    <div class="prod-card">
+        
+<div class="prod-top tb" style="height: 250px; overflow: hidden; background: #f9f9f9; display: flex; align-items: center; justify-content: center;">
+  <img src="/images/prod2.jpg" alt="Smart Vertical Farming" 
+       style="max-width: 100%; max-height: 100%; object-fit: contain; display: block;">
+</div>
+      
+      <div class="prod-body">
+        <span class="prod-num" data-en="PRODUCT 01" data-ar="المنتج 01">PRODUCT 01</span>
+        <div class="tag tag-teal" style="margin-bottom:10px;" data-en="Available" data-ar="متاح">Available</div>
+        <h3 data-en="Smart Vertical Farming from Recycled Plastic" data-ar="الزراعة العمودية الذكية من البلاستيك المعاد تدويره">Smart Vertical Farming from Recycled Plastic</h3>
+        <p data-en="Smart Vertical Farming Systems made from recycled plastic — designed to maximize yield while minimizing water usage in drought-affected areas." data-ar="أنظمة زراعة عمودية ذكية مصنوعة من مواد بلاستيكية معاد تدويرها — مصممة لزيادة الغلة مع تقليل استهلاك المياه في المناطق المتضررة من الجفاف.">Smart Vertical Farming Systems made from recycled plastic — designed to maximize yield while minimizing water usage in drought-affected areas.</p>
+        <ul class="cklist teal">
+          <li data-en="Vertical farming system designs" data-ar="تصميم أنظمة الزراعة العمودية">Vertical farming system designs</li>
+          <li data-en="Training workshops on plastic recycling using 3D printing" data-ar="ورش تدريبية على إعادة تدوير البلاستيك بتقنيات الطباعة ثلاثية الأبعاد">Training workshops on plastic recycling using 3D printing</li>
+          <li data-en="Education for farmers on how to build these systems themselves" data-ar="تعليم المزارعين كيفية بناء هذه الأنظمة بأنفسهم">Education for farmers on how to build these systems themselves</li>
+          <li data-en="Water consumption reduction solutions" data-ar="حلول لتقليل استهلاك المياه">Water consumption reduction solutions</li>
+          <li data-en="Increased productivity in drought-affected areas" data-ar="زيادة الإنتاجية الزراعية في المناطق المتضررة من الجفاف">Increased productivity in drought-affected areas</li>
+        </ul>
+      </div>
+    </div>
+    <div class="prod-card">
+        
+        
+        
+    
+<div class="prod-top bb" style="height: 250px; overflow: hidden; background: #f9f9f9; display: flex; align-items: center; justify-content: center;">
+  <img src="/images/prod1.jpg" alt="Solar Distillation" 
+       style="max-width: 100%; max-height: 100%; object-fit: contain; display: block;">
+</div>
+      <div class="prod-body">
+        <span class="prod-num" data-en="PRODUCT 02" data-ar="المنتج 02">PRODUCT 02</span>
+        <div class="tag tag-blue" style="margin-bottom:10px;" data-en="Available" data-ar="متاح">Available</div>
+        <h3 data-en="Solar Distillation Water-Treatment Systems" data-ar="أنظمة معالجة المياه بالتقطير الشمسي">Solar Distillation Water-Treatment Systems</h3>
+        <p data-en="Designed for dry regions relying on salty groundwater wells — converting unusable water into clean irrigation water using solar energy." data-ar="مصممة للمناطق الجافة التي تعتمد على آبار المياه الجوفية المالحة — تحويلها إلى مياه ري نظيفة باستخدام الطاقة الشمسية.">Designed for dry regions relying on salty groundwater wells — converting unusable water into clean irrigation water using solar energy.</p>
+        <ul class="cklist">
+          <li data-en="Solar distillation system designs for water treatment" data-ar="تصاميم أنظمة التقطير الشمسي لمعالجة المياه">Solar distillation system designs for water treatment</li>
+          <li data-en="Converting salty groundwater into usable irrigation water" data-ar="تحويل المياه الجوفية المالحة إلى مياه ري صالحة">Converting salty groundwater into usable irrigation water</li>
+          <li data-en="Training users on operating and managing these systems" data-ar="تدريب المستخدمين على تشغيل وإدارة هذه الأنظمة">Training users on operating and managing these systems</li>
+          <li data-en="Workshops for building integrated water treatment systems" data-ar="ورش بناء أنظمة معالجة المياه المتكاملة">Workshops for building integrated water treatment systems</li>
+          <li data-en="Engineering consultation for water management and agriculture" data-ar="خدمات استشارية هندسية تتعلق بإدارة المياه والزراعة">Engineering consultation for water management and agriculture</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="why-box">
+    <span class="eyebrow teal" data-en="Why It Matters" data-ar="لماذا يهم هذا">Why It Matters</span>
+    <h3 data-en="Addressing Iraq's Water & Food Security Crisis" data-ar="معالجة أزمة المياه والغذاء في العراق">Addressing Iraq's Water & Food Security Crisis</h3>
+    <p data-en="Iraq faces increasing drought frequency, saline groundwater, and reduced agricultural productivity. Our products are engineered specifically for these conditions — practical, affordable, and deployable without advanced infrastructure." data-ar="يواجه العراق تكرار الجفاف ومياهاً جوفية مالحة وإنتاجية زراعية منخفضة. منتجاتنا مصممة خصيصًا لهذه الظروف — عملية وبأسعار معقولة.">Iraq faces increasing drought frequency, saline groundwater, and reduced agricultural productivity. Our products are engineered specifically for these conditions — practical, affordable, and deployable without advanced infrastructure.</p>
+    <div class="why-chips">
+      <div class="wc wc1"><div class="wc-icon">💧</div><h4 data-en="Water Efficiency" data-ar="كفاءة المياه">Water Efficiency</h4><p data-en="Dramatically reduced irrigation consumption" data-ar="خفض كبير في استهلاك الري">Dramatically reduced irrigation consumption</p></div>
+      <div class="wc wc2"><div class="wc-icon">♻️</div><h4 data-en="Circular Economy" data-ar="الاقتصاد الدائري">Circular Economy</h4><p data-en="Plastic waste repurposed into productive assets" data-ar="نفايات البلاستيك تتحول إلى أصول منتجة">Plastic waste repurposed into productive assets</p></div>
+      <div class="wc wc3"><div class="wc-icon">☀️</div><h4 data-en="Solar-Powered" data-ar="مدعوم بالطاقة الشمسية">Solar-Powered</h4><p data-en="Off-grid solutions for rural Iraq" data-ar="حلول مستقلة عن الشبكة للريف العراقي">Off-grid solutions for rural Iraq</p></div>
+    </div>
+  </div>
+  <footer class="footer"><div class="flogo"><svg width="18" height="18" viewBox="0 0 26 26" fill="none"><path d="M13 23C13 23 7.5 17 7.5 10.5C7.5 7 10 4.5 13 4.5C16 4.5 18.5 7 18.5 10.5C18.5 17 13 23 13 23Z" fill="none" stroke="#5fa88c" stroke-width="1.1"/><line x1="13" y1="4.5" x2="13" y2="23" stroke="#6ab89e" stroke-width="1.1" stroke-linecap="round"/></svg><span class="flogo-text">ENLIL AI</span></div><span class="fcopy" data-en="© 2025 ENLIL AI" data-ar="© 2025 ENLIL AI">© 2025 ENLIL AI</span><ul class="flinks"><li><a onclick="showPage('home')" data-en="Home" data-ar="الرئيسية">Home</a></li><li><a onclick="showPage('about')" data-en="About" data-ar="من نحن">About</a></li></ul></footer>
+</div>
+
+<!-- ARTICLES -->
+<div class="page pt-nav" id="page-articles">
+  <div class="phero"><div class="max-w">
+    <span class="eyebrow" data-en="Articles" data-ar="المقالات">Articles</span>
+    <h2 class="sh" data-en="Climate & Environment Articles" data-ar="مقالات المناخ والبيئة">Climate & Environment Articles</h2>
+    <p class="lead" data-en="A dedicated space for climate, environmental, and water-security content focused on Iraq." data-ar="مساحة مخصصة للمحتوى المتعلق بالمناخ والبيئة والأمن المائي بتركيز على العراق.">A dedicated space for climate, environmental, and water-security content focused on Iraq.</p>
+  </div></div>
+  <div id="articles-list">
+    <div class="art-layout">
+      <div class="art-feed">
+        <div class="art-card" onclick="showArticle(1)">
+          <div class="art-meta"><span class="tag tag-blue" data-en="Water Security" data-ar="الأمن المائي">Water Security</span><span class="tag tag-amber" data-en="Environmental Health" data-ar="الصحة البيئية">Environmental Health</span><span class="art-date">July 7, 2025</span></div>
+          <h3 data-en="The Risk of PFAS in Iraq's Groundwater Amid Drought: Insights from Asia-Pacific Experiences" data-ar="خطر مواد PFAS في المياه الجوفية العراقية وسط الجفاف: رؤى من تجارب منطقة آسيا والمحيط الهادئ">The Risk of PFAS in Iraq's Groundwater Amid Drought: Insights from Asia-Pacific Experiences</h3>
+          <p class="art-exc" data-en="Because of the ongoing drought, many people in Iraq have no choice but to consume groundwater without realizing the potential risks of PFAS contamination — often called 'forever chemicals'." data-ar="بسبب الجفاف المستمر، لا يجد كثير من العراقيين بديلاً عن استهلاك المياه الجوفية دون إدراك المخاطر المحتملة لتلوث مواد PFAS التي يُطلق عليها 'المواد الكيميائية الأبدية'.">Because of the ongoing drought, many people in Iraq have no choice but to consume groundwater without realizing the potential risks of PFAS contamination — often called 'forever chemicals'.</p>
+          <div class="art-author"><div class="avatar">LA</div><div class="author-info"><span class="author-name">Laith Alobaidy</span><span class="author-role" data-en="Environmental Engineer" data-ar="مهندس بيئي">Environmental Engineer</span></div><span class="read-link" data-en="Read article →" data-ar="اقرأ المقال ←">Read article →</span></div>
+        </div>
+        <div class="art-card" onclick="showArticle(2)">
+          <div class="art-meta"><span class="tag tag-teal" data-en="Drought" data-ar="الجفاف">Drought</span><span class="tag tag-blue" data-en="Water Quality" data-ar="جودة المياه">Water Quality</span><span class="art-date">June 11, 2025</span></div>
+          <h3 data-en="The Silent Link Between Drought and Contaminated Water" data-ar="الرابط الصامت بين الجفاف والمياه الملوثة">The Silent Link Between Drought and Contaminated Water</h3>
+          <p class="art-exc" data-en="When we think of drought, we imagine dry land and vanishing streams. But there's a hidden danger: water quality. Drought doesn't just mean less water — it means dirtier, riskier water too." data-ar="حين نفكر في الجفاف نتخيل الأرض الجافة والجداول المتلاشية. لكن ثمة خطر خفي: جودة المياه. الجفاف لا يعني مياهاً أقل فحسب — بل مياهاً أكثر تلوثًا.">When we think of drought, we imagine dry land and vanishing streams. But there's a hidden danger: water quality. Drought doesn't just mean less water — it means dirtier, riskier water too.</p>
+          <div class="art-author"><div class="avatar">LA</div><div class="author-info"><span class="author-name">Laith Alobaidy</span><span class="author-role" data-en="Environmental Engineer" data-ar="مهندس بيئي">Environmental Engineer</span></div><span class="read-link" data-en="Read article →" data-ar="اقرأ المقال ←">Read article →</span></div>
+        </div>
+      </div>
+      <div class="art-sidebar">
+        <div class="sidebar-card"><h4 data-en="Topics" data-ar="المواضيع">Topics</h4><div><span class="topic-tag">#PFAS</span><span class="topic-tag">#WaterSecurity</span><span class="topic-tag">#Drought</span><span class="topic-tag">#Iraq</span><span class="topic-tag">#ClimateResilience</span><span class="topic-tag">#Environment</span></div></div>
+        <div class="sidebar-card"><h4 data-en="About the Author" data-ar="عن الكاتب">About the Author</h4><div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;"><div class="avatar" style="width:38px;height:38px;font-size:13px;">LA</div><div><div style="font-size:13px;font-weight:600;color:#fff;">Laith Alobaidy</div><div style="font-size:11px;color:var(--gray);" data-en="Environmental Engineer" data-ar="مهندس بيئي">Environmental Engineer</div></div></div><p class="bt" style="font-size:12.5px;" data-en="Specialist in water security, PFAS contamination, and environmental engineering focused on Iraq's climate challenges." data-ar="متخصص في الأمن المائي وتلوث PFAS والهندسة البيئية مع التركيز على التحديات المناخية في العراق.">Specialist in water security, PFAS contamination, and environmental engineering focused on Iraq's climate challenges.</p></div>
+      </div>
+    </div>
+  </div>
+  <div id="article-full-view" class="art-full">
+    <div class="art-full-inner">
+      <button class="back-btn" onclick="hideArticle()"><span data-en="← Back to Articles" data-ar="← العودة للمقالات">← Back to Articles</span></button>
+      <div id="article-content"></div>
+    </div>
+  </div>
+  <footer class="footer"><div class="flogo"><svg width="18" height="18" viewBox="0 0 26 26" fill="none"><path d="M13 23C13 23 7.5 17 7.5 10.5C7.5 7 10 4.5 13 4.5C16 4.5 18.5 7 18.5 10.5C18.5 17 13 23 13 23Z" fill="none" stroke="#5fa88c" stroke-width="1.1"/><line x1="13" y1="4.5" x2="13" y2="23" stroke="#6ab89e" stroke-width="1.1" stroke-linecap="round"/></svg><span class="flogo-text">ENLIL AI</span></div><span class="fcopy" data-en="© 2025 ENLIL AI" data-ar="© 2025 ENLIL AI">© 2025 ENLIL AI</span><ul class="flinks"><li><a onclick="showPage('home')" data-en="Home" data-ar="الرئيسية">Home</a></li></ul></footer>
+</div>
+
+<!-- DASHBOARD -->
+<div class="page pt-nav" id="page-dashboard">
+<div style="background:#F0F2F5;min-height:calc(100vh - 68px);">
+<div class="dwrap">
+<div style="padding:6px 0;"><button onclick="showPage('home')" style="display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #e5e7eb;border-radius:9px;padding:7px 14px;font-size:12.5px;font-weight:600;color:#0a0d18;cursor:pointer;font-family:inherit;" onmouseover="this.style.background='#0a0d18';this.style.color='#fff';" onmouseout="this.style.background='#fff';this.style.color='#0a0d18';"><span data-en="← Back to Site" data-ar="← العودة للموقع">← Back to Site</span></button></div>
+<div class="dcard"><div class="daccent"></div><p class="dtitle" data-en="💧 Drought & Flood Prediction Dashboard ☀️" data-ar="💧 لوحة تنبؤ الجفاف والفيضانات ☀️">💧 Drought & Flood Prediction Dashboard ☀️</p><p style="text-align:center;color:#7F8C8D;font-size:12.5px;margin-top:5px;" data-en="Baghdad Station — Standardized Precipitation Index (SPI)" data-ar="محطة بغداد — مؤشر هطول الأمطار الموحد (SPI)">Baghdad Station — Standardized Precipitation Index (SPI)</p><div class="dbrow"><span class="dbadge dbb">🧠 <span data-en="RMSN & DMSN Models" data-ar="نماذج RMSN & DMSN">RMSN & DMSN Models</span></span><span class="dbadge dbg">⏰ 1985–2021 | 2022–2030</span><span class="dbadge dbo">📍 <span data-en="Baghdad Meteorological Station" data-ar="محطة بغداد للأرصاد الجوية">Baghdad Meteorological Station</span></span></div></div>
+<div class="dcard" style="padding:12px 18px;"><div class="dleg-wrap" id="d-legend"></div></div>
+<div>
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:2px 2px 9px;">
+    <strong style="font-size:14px;color:#2C3E50;" data-en="📈 Latest Predictions per Index" data-ar="📈 آخر التنبؤات لكل مؤشر">📈 Latest Predictions per Index</strong>
+    <select id="d-model-top" style="padding:5px 10px;border-radius:8px;border:1px solid #e5e7eb;background:#F8F9FA;font-size:12px;font-family:inherit;color:#2C3E50;outline:none;">
+      <option value="rmsn" data-en="RMSN (Recurrent)" data-ar="RMSN (المتكرر)">RMSN (Recurrent)</option>
+      <option value="dmsn" data-en="DMSN (Dilated)" data-ar="DMSN (المتفرع)">DMSN (Dilated)</option>
+    </select>
+  </div>
+  <div class="dg4" id="d-stat-cards"></div>
+</div>
+<div class="dcard">
+  <div class="dcard-head"><span style="font-size:17px;">📅</span><h2 data-en="Interactive Prediction Selector" data-ar="محدد التنبؤ التفاعلي">Interactive Prediction Selector</h2></div>
+  <div class="dsg">
+    <div><label data-en="Year" data-ar="السنة">Year</label><select id="d-sel-year"></select></div>
+    <div><label data-en="Month" data-ar="الشهر">Month</label><select id="d-sel-month"></select></div>
+    <div><label data-en="Scale" data-ar="المؤشر">Scale</label><select id="d-sel-scale"><option value="spi3">SPI-3</option><option value="spi6">SPI-6</option><option value="spi9">SPI-9</option><option value="spi12">SPI-12</option></select></div>
+    <div><label data-en="Model" data-ar="النموذج">Model</label><select id="d-sel-model"><option value="rmsn" data-en="RMSN" data-ar="RMSN">RMSN</option><option value="dmsn" data-en="DMSN" data-ar="DMSN">DMSN</option></select></div>
+  </div>
+  <div class="dres" id="d-result"><p style="color:#7F8C8D;font-size:12.5px;" data-en="Select options to view prediction" data-ar="اختر خياراتك لعرض التنبؤ">Select options to view prediction</p></div>
+</div>
+<div class="dcard">
+  <div class="dcard-head" style="justify-content:space-between;flex-wrap:wrap;gap:7px;">
+    <div style="display:flex;align-items:center;gap:6px;"><span style="font-size:17px;">📉</span><h2 data-en="Future Prediction Timeline" data-ar="مخطط التنبؤ المستقبلي">Future Prediction Timeline</h2></div>
+    <div class="dspi-tog" id="d-spi-tog"></div>
+  </div>
+  <div class="dchart"><img id="d-tl-img" src="" alt="Timeline"/></div>
+</div>
+<div class="dg2">
+  <div class="dcard"><div class="dcard-head"><span style="font-size:17px;">📅</span><h2 data-en="Heatmap Calendar" data-ar="خريطة التقويم الحرارية">Heatmap Calendar</h2></div><div class="dchart"><img id="d-hm-static" src="" alt="Heatmap"/></div></div>
+  <div class="dcard"><div class="dcard-head"><span style="font-size:17px;">🗂️</span><h2 data-en="Interactive Heatmap" data-ar="خريطة تفاعلية">Interactive Heatmap</h2><span class="dsub" id="d-hm-lbl">SPI-3</span></div><div class="dhm-scroll"><table class="dhm" id="d-hm-table"></table></div><div class="dhm-leg" id="d-hm-leg"></div></div>
+</div>
+<div class="dg2">
+  <div class="dcard"><div class="dcard-head"><span style="font-size:17px;">📊</span><h2 data-en="Classification Distribution" data-ar="توزيع التصنيفات">Classification Distribution</h2></div><div class="dchart"><img id="d-dist-img" src="" alt="Distribution"/></div></div>
+  <div class="dcard"><div class="dcard-head"><span style="font-size:17px;">📊</span><h2 data-en="Interactive Distribution" data-ar="توزيع تفاعلي">Interactive Distribution</h2></div><div id="d-dist-bars"></div></div>
+</div>
+<div class="dcard"><div class="dcard-head"><span style="font-size:17px;">👁️</span><h2 data-en="Historical vs Predictions" data-ar="التاريخي مقابل التنبؤات">Historical vs Predictions</h2></div><div class="dchart"><img id="d-hist-img" src="" alt="Historical"/></div></div>
+<div class="dg2">
+  <div class="dcard"><div class="dcard-head"><span style="font-size:17px;">📈</span><h2 data-en="Model Performance" data-ar="مقارنة أداء النماذج">Model Performance</h2></div><div class="dchart"><img id="d-perf-img" src="" alt="Performance"/></div></div>
+  <div class="dcard">
+    <div class="dcard-head"><span style="font-size:17px;">📋</span><h2 data-en="Detailed Performance Values" data-ar="قيم الأداء التفصيلية">Detailed Performance Values</h2></div>
+    <div style="overflow-x:auto;"><table class="dperf"><thead><tr><th></th><th colspan="3" style="color:#4A90D9;">RMSN</th><th colspan="3" style="color:#E8833A;">DMSN</th></tr><tr><th>SPI</th><th>R</th><th>RMSE</th><th>MAE</th><th>R</th><th>RMSE</th><th>MAE</th></tr></thead><tbody id="d-perf-tbody"></tbody></table></div>
+    <div style="margin-top:10px;padding:10px;border-radius:8px;background:#F8F9FA;font-size:11.5px;color:#7F8C8D;line-height:1.7;"><p data-en="R (Correlation): closer to 1 is better" data-ar="R (معامل الارتباط): كلما اقترب من 1 كان أفضل">R (Correlation): closer to 1 is better</p><p data-en="RMSE / MAE: smaller is better" data-ar="RMSE / MAE: كلما كان أصغر كان أفضل">RMSE / MAE: smaller is better</p></div>
+  </div>
+</div>
+<div class="dcard">
+  <div class="dcard-head"><span style="font-size:17px;">📄</span><h2 data-en="Comprehensive Analysis" data-ar="التحليل الشامل">Comprehensive Analysis</h2></div>
+  <div class="dabox dab1"><h3>⚡ <span data-en="Key Findings" data-ar="النتائج الرئيسية">Key Findings</span></h3><ul>
+    <li data-en="RMSN achieved correlation coefficients up to 1.0 for SPI-6, SPI-9, and SPI-12 — outstanding performance." data-ar="حقق RMSN معامل ارتباط يصل إلى 1.0 لـ SPI-6 وSPI-9 وSPI-12 — أداء متميز.">RMSN achieved correlation coefficients up to 1.0 for SPI-6, SPI-9, and SPI-12 — outstanding performance.</li>
+    <li data-en="For SPI-3, RMSN achieved R=0.7881 with RMSE=0.6669, reflecting good short-term variability capture." data-ar="في SPI-3 حقق RMSN معامل ارتباط 0.7881 مع RMSE = 0.6669، وهو أداء جيد.">For SPI-3, RMSN achieved R=0.7881 with RMSE=0.6669, reflecting good short-term variability capture.</li>
+    <li data-en="DMSN was most effective for SPI-12 (R=0.7684), indicating suitability for long-term patterns." data-ar="كان DMSN أكثر فعالية في SPI-12 (R=0.7684)، مما يشير إلى ملاءمته للأنماط طويلة المدى.">DMSN was most effective for SPI-12 (R=0.7684), indicating suitability for long-term patterns.</li>
+  </ul></div>
+  <div class="dabox dab2"><h3>⚠️ <span data-en="Drought Risk Assessment" data-ar="تقييم مخاطر الجفاف">Drought Risk Assessment</span></h3><ul>
+    <li data-en="Forecasts indicate continued moderate-to-severe drought patterns during summer months (June–September)." data-ar="تشير التنبؤات إلى استمرار نمط الجفاف المعتدل إلى الحاد خلال أشهر الصيف (يونيو–سبتمبر).">Forecasts indicate continued moderate-to-severe drought patterns during summer months (June–September).</li>
+    <li data-en="The 2024–2027 period may experience sharper SPI-3 variability, requiring proactive planning." data-ar="الفترة 2024–2027 قد تشهد تقلبات أكثر حدة في SPI-3 مما يستدعي تدابير استباقية.">The 2024–2027 period may experience sharper SPI-3 variability, requiring proactive planning.</li>
+    <li data-en="Winter months (December–February) show positive SPI values in most forecasts." data-ar="أشهر الشتاء (ديسمبر–فبراير) تظهر قيم SPI إيجابية في معظم التنبؤات.">Winter months (December–February) show positive SPI values in most forecasts.</li>
+  </ul></div>
+  <div class="dabox dab3"><h3>🛡️ <span data-en="Recommendations" data-ar="التوصيات">Recommendations</span></h3><ul>
+    <li data-en="Use RMSN as the primary forecast model, with DMSN as a reference for long-term indices." data-ar="الاعتماد على RMSN كنموذج أساسي للتنبؤ مع استخدام DMSN مرجعاً للمؤشرات طويلة المدى.">Use RMSN as the primary forecast model, with DMSN as a reference for long-term indices.</li>
+    <li data-en="Develop contingency plans for anticipated severe drought periods during summer months." data-ar="وضع خطط طوارئ للتعامل مع فترات الجفاف الحاد المتوقعة في أشهر الصيف.">Develop contingency plans for anticipated severe drought periods during summer months.</li>
+    <li data-en="Integrate these forecasts with existing early warning systems at the Iraqi Meteorological Authority." data-ar="دمج هذه التنبؤات مع أنظمة الإنذار المبكر في هيئة الأرصاد الجوية العراقية.">Integrate these forecasts with existing early warning systems at the Iraqi Meteorological Authority.</li>
+  </ul></div>
+</div>
+<div class="dcard">
+  <button class="dgbtn" onclick="toggleGuide()">
+    <div class="dcard-head" style="margin:0;"><span style="font-size:17px;">🎓</span><h2 data-en="How to Use This Dashboard?" data-ar="كيف تستخدم هذه اللوحة؟">How to Use This Dashboard?</h2></div>
+    <span id="d-gchev" style="font-size:17px;color:#7F8C8D;">▼</span>
+  </button>
+  <div id="d-gbody" class="dhidden">
+    <div class="dgsteps">
+      <div class="dgstep"><div class="dgnum" style="background:#4A90D9;">1</div><div class="dgbody"><h3 data-en="What is SPI?" data-ar="ما هو مؤشر SPI؟">What is SPI?</h3><p data-en="Standardized Precipitation Index. Negative = drought, positive = wet, near-zero = normal." data-ar="مؤشر هطول الأمطار الموحد. سالب = جفاف، موجب = أمطار، قريب من الصفر = طبيعي.">Standardized Precipitation Index. Negative = drought, positive = wet, near-zero = normal.</p></div></div>
+      <div class="dgstep"><div class="dgnum" style="background:#27AE60;">2</div><div class="dgbody"><h3 data-en="Reading the Colors" data-ar="قراءة الألوان">Reading the Colors</h3><p data-en="Green = normal, orange = moderate drought, red = severe drought, blue = wet conditions." data-ar="أخضر = طبيعي، برتقالي = جفاف معتدل، أحمر = جفاف حاد، أزرق = رطوبة عالية.">Green = normal, orange = moderate drought, red = severe drought, blue = wet conditions.</p></div></div>
+      <div class="dgstep"><div class="dgnum" style="background:#E8833A;">3</div><div class="dgbody"><h3 data-en="RMSN vs DMSN" data-ar="RMSN مقابل DMSN">RMSN vs DMSN</h3><p data-en="RMSN: more accurate overall — use as primary. DMSN: better for SPI-12 long-term patterns." data-ar="RMSN: أكثر دقة بشكل عام — النموذج الأساسي. DMSN: أفضل للأنماط طويلة المدى (SPI-12).">RMSN: more accurate overall — use as primary. DMSN: better for SPI-12 long-term patterns.</p></div></div>
+    </div>
+  </div>
+</div>
+<div class="dcard">
+  <div class="dcard-head"><span style="font-size:17px;">💾</span><h2 data-en="Data Source & Methodology" data-ar="مصدر البيانات والمنهجية">Data Source & Methodology</h2></div>
+  <div class="ddsg">
+    <div class="ddsc"><h3 style="color:#4A90D9;">📍 <span data-en="Data Source" data-ar="مصدر البيانات">Data Source</span></h3><ul><li>● <span data-en="Baghdad Meteorological Station" data-ar="محطة بغداد للأرصاد الجوية">Baghdad Meteorological Station</span></li><li>● <span data-en="Monthly rainfall data" data-ar="بيانات هطول الأمطار الشهرية">Monthly rainfall data</span></li><li>● 1985–2021 <span data-en="historical" data-ar="تاريخي">historical</span> | 2022–2030 <span data-en="forecast" data-ar="تنبؤي">forecast</span></li></ul></div>
+    <div class="ddsc" style="background:rgba(74,144,217,.04);border-color:rgba(74,144,217,.12);"><h3 style="color:#4A90D9;">🧠 RMSN</h3><p style="font-size:11.5px;color:#7F8C8D;line-height:1.65;" data-en="Stacked Recurrent Neural Network. Uses multiple recurrent layers to capture temporal patterns in rainfall data." data-ar="شبكة عصبية متكررة مكدسة. تستخدم طبقات متعددة لالتقاط الأنماط الزمنية في بيانات الأمطار.">Stacked Recurrent Neural Network. Uses multiple recurrent layers to capture temporal patterns in rainfall data.</p></div>
+    <div class="ddsc" style="background:rgba(232,131,58,.04);border-color:rgba(232,131,58,.12);"><h3 style="color:#E8833A;">🧱 DMSN</h3><p style="font-size:11.5px;color:#7F8C8D;line-height:1.65;" data-en="Stacked Dilated Neural Network. Uses dilated convolutions to capture long-term climate patterns effectively." data-ar="شبكة عصبية متفرعة مكدسة. تستخدم التوسع المفرق لالتقاط الأنماط المناخية طويلة المدى.">Stacked Dilated Neural Network. Uses dilated convolutions to capture long-term climate patterns effectively.</p></div>
+  </div>
+</div>
+<div style="text-align:center;padding:12px 0 6px;font-size:11.5px;color:#7F8C8D;" data-en="Drought & Flood Prediction Dashboard — Baghdad Station | ENLIL AI" data-ar="لوحة تنبؤ الجفاف والفيضانات — محطة بغداد | ENLIL AI">Drought & Flood Prediction Dashboard — Baghdad Station | ENLIL AI</div>
+</div>
+</div>
+</div>
+
+<!-- JAVASCRIPT -->
+<script>
+const ALL_DATA = {"spi3":{"historical":[{"year":1985,"month":3,"monthName":"Mar","actual":1.0787,"rmsn":1.0787,"dmsn":1.3316},{"year":1985,"month":4,"monthName":"Apr","actual":0.5625,"rmsn":0.5625,"dmsn":1.1674},{"year":1985,"month":5,"monthName":"May","actual":0.4776,"rmsn":0.4776,"dmsn":0.7657},{"year":1985,"month":6,"monthName":"Jun","actual":-0.0536,"rmsn":-0.0536,"dmsn":-0.4419},{"year":1985,"month":7,"monthName":"Jul","actual":-0.0859,"rmsn":-0.0859,"dmsn":-0.8639},{"year":1985,"month":8,"monthName":"Aug","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.4414},{"year":1985,"month":9,"monthName":"Sep","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.4402},{"year":1985,"month":10,"monthName":"Oct","actual":-1.4406,"rmsn":-1.4406,"dmsn":-0.0028},{"year":1985,"month":11,"monthName":"Nov","actual":0.0599,"rmsn":0.0599,"dmsn":0.9064},{"year":1985,"month":12,"monthName":"Dec","actual":0.7964,"rmsn":0.7964,"dmsn":1.3963},{"year":1986,"month":3,"monthName":"Mar","actual":1.3651,"rmsn":1.3651,"dmsn":1.5462},{"year":1986,"month":4,"monthName":"Apr","actual":1.697,"rmsn":1.697,"dmsn":0.929},{"year":1986,"month":5,"monthName":"May","actual":1.4603,"rmsn":1.4603,"dmsn":0.4385},{"year":1986,"month":6,"monthName":"Jun","actual":1.0752,"rmsn":1.0752,"dmsn":0.0826},{"year":1986,"month":7,"monthName":"Jul","actual":0.2192,"rmsn":0.2192,"dmsn":0.0158},{"year":1986,"month":8,"monthName":"Aug","actual":-1.4406,"rmsn":-1.4406,"dmsn":-0.9963},{"year":1986,"month":9,"monthName":"Sep","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.2162},{"year":1986,"month":10,"monthName":"Oct","actual":-0.7596,"rmsn":-0.7596,"dmsn":-1.4403},{"year":1986,"month":11,"monthName":"Nov","actual":0.3759,"rmsn":0.3759,"dmsn":-0.917},{"year":1986,"month":12,"monthName":"Dec","actual":0.5756,"rmsn":0.5756,"dmsn":1.6216},{"year":1987,"month":3,"monthName":"Mar","actual":0.3052,"rmsn":0.3052,"dmsn":1.6086},{"year":1987,"month":4,"monthName":"Apr","actual":0.3352,"rmsn":0.3352,"dmsn":1.2364},{"year":1987,"month":5,"monthName":"May","actual":0.1898,"rmsn":0.1898,"dmsn":1.1945},{"year":1987,"month":6,"monthName":"Jun","actual":-0.1405,"rmsn":-0.1405,"dmsn":1.1589},{"year":1987,"month":7,"monthName":"Jul","actual":-0.2428,"rmsn":-0.2428,"dmsn":-0.1937},{"year":1987,"month":8,"monthName":"Aug","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.4414},{"year":1987,"month":9,"monthName":"Sep","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.4004},{"year":1987,"month":10,"monthName":"Oct","actual":0.3966,"rmsn":0.3966,"dmsn":0.088},{"year":1987,"month":11,"monthName":"Nov","actual":0.4545,"rmsn":0.4545,"dmsn":0.8033},{"year":1987,"month":12,"monthName":"Dec","actual":0.8352,"rmsn":0.8352,"dmsn":0.984},{"year":1988,"month":3,"monthName":"Mar","actual":1.4775,"rmsn":1.4775,"dmsn":1.1789},{"year":1988,"month":4,"monthName":"Apr","actual":1.4436,"rmsn":1.4436,"dmsn":1.0438},{"year":1988,"month":5,"monthName":"May","actual":1.2782,"rmsn":1.2782,"dmsn":0.9134},{"year":1988,"month":6,"monthName":"Jun","actual":0.7819,"rmsn":0.7819,"dmsn":0.3415},{"year":1988,"month":7,"monthName":"Jul","actual":-1.4006,"rmsn":-1.4006,"dmsn":-0.562},{"year":1988,"month":8,"monthName":"Aug","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.4405},{"year":1988,"month":9,"monthName":"Sep","actual":-0.8867,"rmsn":-0.8867,"dmsn":-0.4419},{"year":1988,"month":10,"monthName":"Oct","actual":-0.1405,"rmsn":-0.1405,"dmsn":0.1898},{"year":1988,"month":11,"monthName":"Nov","actual":-0.0167,"rmsn":-0.0167,"dmsn":1.0214},{"year":1988,"month":12,"monthName":"Dec","actual":1.081,"rmsn":1.081,"dmsn":0.6088},{"year":1989,"month":3,"monthName":"Mar","actual":1.3775,"rmsn":1.3775,"dmsn":1.1404},{"year":1989,"month":4,"monthName":"Apr","actual":1.054,"rmsn":1.054,"dmsn":1.2694},{"year":1989,"month":5,"monthName":"May","actual":0.9176,"rmsn":0.9176,"dmsn":0.6511},{"year":1989,"month":6,"monthName":"Jun","actual":-0.5336,"rmsn":-0.5336,"dmsn":0.0519},{"year":1989,"month":7,"monthName":"Jul","actual":-1.4006,"rmsn":-1.4006,"dmsn":-0.5632},{"year":1989,"month":8,"monthName":"Aug","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.2837},{"year":1989,"month":9,"monthName":"Sep","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.993},{"year":1989,"month":10,"monthName":"Oct","actual":-1.4006,"rmsn":-1.4006,"dmsn":-1.4007},{"year":1989,"month":11,"monthName":"Nov","actual":1.1061,"rmsn":1.1061,"dmsn":-1.3692},{"year":1989,"month":12,"monthName":"Dec","actual":1.1523,"rmsn":1.1523,"dmsn":-0.1193},{"year":1990,"month":3,"monthName":"Mar","actual":1.3316,"rmsn":1.3316,"dmsn":1.2724},{"year":1990,"month":4,"monthName":"Apr","actual":1.1673,"rmsn":1.1673,"dmsn":0.9191},{"year":1990,"month":5,"monthName":"May","actual":0.7655,"rmsn":0.7655,"dmsn":0.6443},{"year":1990,"month":6,"monthName":"Jun","actual":-0.4416,"rmsn":-0.4416,"dmsn":0.4515},{"year":1990,"month":7,"monthName":"Jul","actual":-1.4006,"rmsn":-1.4006,"dmsn":0.1335},{"year":1990,"month":8,"monthName":"Aug","actual":-1.4406,"rmsn":-1.4406,"dmsn":-0.8878},{"year":1990,"month":9,"monthName":"Sep","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.4005},{"year":1990,"month":10,"monthName":"Oct","actual":-0.0029,"rmsn":-0.0029,"dmsn":-1.3693},{"year":1990,"month":11,"monthName":"Nov","actual":0.9065,"rmsn":0.9065,"dmsn":-0.3685},{"year":1990,"month":12,"monthName":"Dec","actual":0.95,"rmsn":0.95,"dmsn":0.2312},{"year":1992,"month":3,"monthName":"Mar","actual":0.8413,"rmsn":0.8413,"dmsn":0.556},{"year":1992,"month":4,"monthName":"Apr","actual":0.723,"rmsn":0.723,"dmsn":0.5074},{"year":1992,"month":5,"monthName":"May","actual":0.4385,"rmsn":0.4385,"dmsn":0.9248},{"year":1992,"month":6,"monthName":"Jun","actual":0.0826,"rmsn":0.0826,"dmsn":0.1348},{"year":1992,"month":7,"monthName":"Jul","actual":0.017,"rmsn":0.017,"dmsn":-0.481},{"year":1992,"month":8,"monthName":"Aug","actual":-0.534,"rmsn":-0.534,"dmsn":-1.3997},{"year":1992,"month":9,"monthName":"Sep","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.4388},{"year":1992,"month":10,"monthName":"Oct","actual":-1.4406,"rmsn":-1.4406,"dmsn":0.1393},{"year":1992,"month":11,"monthName":"Nov","actual":0.6627,"rmsn":0.6627,"dmsn":1.0409},{"year":1992,"month":12,"monthName":"Dec","actual":0.9774,"rmsn":0.9774,"dmsn":1.3974},{"year":1993,"month":3,"monthName":"Mar","actual":1.6087,"rmsn":1.6087,"dmsn":1.3615},{"year":1993,"month":4,"monthName":"Apr","actual":1.2361,"rmsn":1.2361,"dmsn":1.2255},{"year":1993,"month":5,"monthName":"May","actual":1.1945,"rmsn":1.1945,"dmsn":0.7453},{"year":1993,"month":6,"monthName":"Jun","actual":1.1587,"rmsn":1.1587,"dmsn":-0.016},{"year":1993,"month":7,"monthName":"Jul","actual":-0.1934,"rmsn":-0.1934,"dmsn":-0.1129},{"year":1993,"month":8,"monthName":"Aug","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.4001},{"year":1993,"month":9,"monthName":"Sep","actual":-1.4006,"rmsn":-1.4006,"dmsn":-1.4007},{"year":1993,"month":10,"monthName":"Oct","actual":0.0881,"rmsn":0.0881,"dmsn":-1.4405},{"year":1993,"month":11,"monthName":"Nov","actual":0.1196,"rmsn":0.1196,"dmsn":0.714},{"year":1993,"month":12,"monthName":"Dec","actual":0.5048,"rmsn":0.5048,"dmsn":1.3471},{"year":1994,"month":3,"monthName":"Mar","actual":1.1789,"rmsn":1.1789,"dmsn":1.7358},{"year":1994,"month":4,"monthName":"Apr","actual":1.0433,"rmsn":1.0433,"dmsn":0.2983},{"year":1994,"month":5,"monthName":"May","actual":0.9134,"rmsn":0.9134,"dmsn":-0.205},{"year":1994,"month":6,"monthName":"Jun","actual":0.1676,"rmsn":0.1676,"dmsn":-0.4689},{"year":1994,"month":7,"monthName":"Jul","actual":-0.8867,"rmsn":-0.8867,"dmsn":-1.3692},{"year":1994,"month":8,"monthName":"Aug","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.4004},{"year":1994,"month":9,"monthName":"Sep","actual":-0.4419,"rmsn":-0.4419,"dmsn":-1.4006},{"year":1994,"month":10,"monthName":"Oct","actual":0.1898,"rmsn":0.1898,"dmsn":-1.4005},{"year":1994,"month":11,"monthName":"Nov","actual":1.0214,"rmsn":1.0214,"dmsn":-0.4166},{"year":1994,"month":12,"monthName":"Dec","actual":1.3489,"rmsn":1.3489,"dmsn":0.7722},{"year":1995,"month":3,"monthName":"Mar","actual":1.1404,"rmsn":1.1404,"dmsn":0.601},{"year":1995,"month":4,"monthName":"Apr","actual":1.2695,"rmsn":1.2695,"dmsn":0.7185},{"year":1995,"month":5,"monthName":"May","actual":0.6512,"rmsn":0.6512,"dmsn":0.2349},{"year":1995,"month":6,"monthName":"Jun","actual":0.4385,"rmsn":0.4385,"dmsn":0.1856},{"year":1995,"month":7,"monthName":"Jul","actual":-0.5336,"rmsn":-0.5336,"dmsn":-0.6799},{"year":1995,"month":8,"monthName":"Aug","actual":-1.4006,"rmsn":-1.4006,"dmsn":-1.3659},{"year":1995,"month":9,"monthName":"Sep","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.3695},{"year":1995,"month":10,"monthName":"Oct","actual":-1.4006,"rmsn":-1.4006,"dmsn":0.0169},{"year":1995,"month":11,"monthName":"Nov","actual":-1.3691,"rmsn":-1.3691,"dmsn":1.527},{"year":1995,"month":12,"monthName":"Dec","actual":0.5756,"rmsn":0.5756,"dmsn":0.8531},{"year":1996,"month":3,"monthName":"Mar","actual":1.2724,"rmsn":1.2724,"dmsn":0.9761},{"year":1996,"month":4,"monthName":"Apr","actual":0.9189,"rmsn":0.9189,"dmsn":1.1149},{"year":1996,"month":5,"monthName":"May","actual":0.8824,"rmsn":0.8824,"dmsn":0.3301},{"year":1996,"month":6,"monthName":"Jun","actual":0.4518,"rmsn":0.4518,"dmsn":0.6314},{"year":1996,"month":7,"monthName":"Jul","actual":0.1345,"rmsn":0.1345,"dmsn":-0.0861},{"year":1996,"month":8,"monthName":"Aug","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.0743},{"year":1996,"month":9,"monthName":"Sep","actual":-1.4006,"rmsn":-1.4006,"dmsn":-0.8853},{"year":1996,"month":10,"monthName":"Oct","actual":-1.3691,"rmsn":-1.3691,"dmsn":-0.8866},{"year":1996,"month":11,"monthName":"Nov","actual":-0.2851,"rmsn":-0.2851,"dmsn":-0.5563},{"year":1996,"month":12,"monthName":"Dec","actual":0.2314,"rmsn":0.2314,"dmsn":0.3354},{"year":1997,"month":3,"monthName":"Mar","actual":0.5558,"rmsn":0.5558,"dmsn":0.759},{"year":1997,"month":4,"monthName":"Apr","actual":0.5072,"rmsn":0.5072,"dmsn":1.0029},{"year":1997,"month":5,"monthName":"May","actual":0.2696,"rmsn":0.2696,"dmsn":0.9964},{"year":1997,"month":6,"monthName":"Jun","actual":0.1346,"rmsn":0.1346,"dmsn":0.369},{"year":1997,"month":7,"monthName":"Jul","actual":-0.5336,"rmsn":-0.5336,"dmsn":-0.1608},{"year":1997,"month":8,"monthName":"Aug","actual":-1.4006,"rmsn":-1.4006,"dmsn":-1.4409},{"year":1997,"month":9,"monthName":"Sep","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.0656},{"year":1997,"month":10,"monthName":"Oct","actual":0.1394,"rmsn":0.1394,"dmsn":-0.1035},{"year":1997,"month":11,"monthName":"Nov","actual":1.0409,"rmsn":1.0409,"dmsn":0.2394},{"year":1997,"month":12,"monthName":"Dec","actual":1.3976,"rmsn":1.3976,"dmsn":0.0799},{"year":1998,"month":3,"monthName":"Mar","actual":1.3615,"rmsn":1.3615,"dmsn":1.4063},{"year":1998,"month":4,"monthName":"Apr","actual":0.912,"rmsn":0.912,"dmsn":1.3206},{"year":1998,"month":5,"monthName":"May","actual":0.7454,"rmsn":0.7454,"dmsn":1.2811},{"year":1998,"month":6,"monthName":"Jun","actual":-0.0167,"rmsn":-0.0167,"dmsn":0.3636},{"year":1998,"month":7,"monthName":"Jul","actual":-0.1121,"rmsn":-0.1121,"dmsn":-0.2177},{"year":1998,"month":8,"monthName":"Aug","actual":-1.4006,"rmsn":-1.4006,"dmsn":-1.4409},{"year":1998,"month":9,"monthName":"Sep","actual":-1.4006,"rmsn":-1.4006,"dmsn":-1.4394},{"year":1998,"month":10,"monthName":"Oct","actual":-1.4406,"rmsn":-1.4406,"dmsn":-0.5675},{"year":1998,"month":11,"monthName":"Nov","actual":0.7141,"rmsn":0.7141,"dmsn":0.1717},{"year":1998,"month":12,"monthName":"Dec","actual":0.7264,"rmsn":0.7264,"dmsn":0.1723},{"year":1999,"month":3,"monthName":"Mar","actual":0.6684,"rmsn":0.6684,"dmsn":1.4011},{"year":1999,"month":4,"monthName":"Apr","actual":0.2983,"rmsn":0.2983,"dmsn":0.7756},{"year":1999,"month":5,"monthName":"May","actual":-0.205,"rmsn":-0.205,"dmsn":0.988},{"year":1999,"month":6,"monthName":"Jun","actual":-0.4689,"rmsn":-0.4689,"dmsn":0.9874},{"year":1999,"month":7,"monthName":"Jul","actual":-1.3691,"rmsn":-1.3691,"dmsn":-0.2166},{"year":1999,"month":8,"monthName":"Aug","actual":-1.4006,"rmsn":-1.4006,"dmsn":-1.4374},{"year":1999,"month":9,"monthName":"Sep","actual":-1.4006,"rmsn":-1.4006,"dmsn":-1.4412},{"year":1999,"month":10,"monthName":"Oct","actual":-1.4006,"rmsn":-1.4006,"dmsn":-1.1588},{"year":1999,"month":11,"monthName":"Nov","actual":-0.4168,"rmsn":-0.4168,"dmsn":0.3818},{"year":1999,"month":12,"monthName":"Dec","actual":0.7721,"rmsn":0.7721,"dmsn":0.7194},{"year":2000,"month":3,"monthName":"Mar","actual":0.6011,"rmsn":0.6011,"dmsn":0.9168},{"year":2000,"month":4,"monthName":"Apr","actual":0.247,"rmsn":0.247,"dmsn":1.1167},{"year":2000,"month":5,"monthName":"May","actual":0.2353,"rmsn":0.2353,"dmsn":0.98},{"year":2000,"month":6,"monthName":"Jun","actual":0.1854,"rmsn":0.1854,"dmsn":0.7634},{"year":2000,"month":7,"monthName":"Jul","actual":-0.68,"rmsn":-0.68,"dmsn":0.1494},{"year":2000,"month":8,"monthName":"Aug","actual":-1.4006,"rmsn":-1.4006,"dmsn":-1.119},{"year":2000,"month":9,"monthName":"Sep","actual":-1.3691,"rmsn":-1.3691,"dmsn":-1.4019},{"year":2000,"month":10,"monthName":"Oct","actual":0.0171,"rmsn":0.0171,"dmsn":-0.8637},{"year":2000,"month":11,"monthName":"Nov","actual":0.1537,"rmsn":0.1537,"dmsn":-1.3686},{"year":2000,"month":12,"monthName":"Dec","actual":0.8533,"rmsn":0.8533,"dmsn":-0.2428},{"year":2001,"month":3,"monthName":"Mar","actual":0.9762,"rmsn":0.9762,"dmsn":0.8322},{"year":2001,"month":4,"monthName":"Apr","actual":1.115,"rmsn":1.115,"dmsn":1.1073},{"year":2001,"month":5,"monthName":"May","actual":0.9023,"rmsn":0.9023,"dmsn":-0.301},{"year":2001,"month":6,"monthName":"Jun","actual":0.6316,"rmsn":0.6316,"dmsn":0.2601},{"year":2001,"month":7,"monthName":"Jul","actual":-0.5737,"rmsn":-0.5737,"dmsn":-1.0961},{"year":2001,"month":8,"monthName":"Aug","actual":-1.4006,"rmsn":-1.4006,"dmsn":-1.369},{"year":2001,"month":9,"monthName":"Sep","actual":-0.885,"rmsn":-0.885,"dmsn":-0.9036},{"year":2001,"month":10,"monthName":"Oct","actual":-0.8832,"rmsn":-0.8832,"dmsn":0.4642},{"year":2001,"month":11,"monthName":"Nov","actual":0.1246,"rmsn":0.1246,"dmsn":1.5953},{"year":2001,"month":12,"monthName":"Dec","actual":0.3353,"rmsn":0.3353,"dmsn":1.6629},{"year":2002,"month":3,"monthName":"Mar","actual":0.7589,"rmsn":0.7589,"dmsn":0.4902},{"year":2002,"month":4,"monthName":"Apr","actual":1.0028,"rmsn":1.0028,"dmsn":1.212},{"year":2002,"month":5,"monthName":"May","actual":0.9966,"rmsn":0.9966,"dmsn":0.6011},{"year":2002,"month":6,"monthName":"Jun","actual":0.912,"rmsn":0.912,"dmsn":-0.1675},{"year":2002,"month":7,"monthName":"Jul","actual":-0.1607,"rmsn":-0.1607,"dmsn":-1.3693},{"year":2002,"month":8,"monthName":"Aug","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.4006},{"year":2002,"month":9,"monthName":"Sep","actual":-1.4406,"rmsn":-1.4406,"dmsn":-0.2298},{"year":2002,"month":10,"monthName":"Oct","actual":-0.1032,"rmsn":-0.1032,"dmsn":0.3849},{"year":2002,"month":11,"monthName":"Nov","actual":0.2392,"rmsn":0.2392,"dmsn":1.5896},{"year":2002,"month":12,"monthName":"Dec","actual":0.6395,"rmsn":0.6395,"dmsn":0.9801},{"year":2005,"month":3,"monthName":"Mar","actual":1.4062,"rmsn":1.4062,"dmsn":0.8184},{"year":2005,"month":4,"monthName":"Apr","actual":1.3206,"rmsn":1.3206,"dmsn":0.9554},{"year":2005,"month":5,"monthName":"May","actual":1.281,"rmsn":1.281,"dmsn":0.6355},{"year":2005,"month":6,"monthName":"Jun","actual":0.3637,"rmsn":0.3637,"dmsn":0.0659},{"year":2005,"month":7,"monthName":"Jul","actual":-0.2172,"rmsn":-0.2172,"dmsn":0.3512},{"year":2005,"month":8,"monthName":"Aug","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.4404},{"year":2005,"month":9,"monthName":"Sep","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.5471},{"year":2005,"month":10,"monthName":"Oct","actual":-1.4006,"rmsn":-1.4006,"dmsn":-0.8582},{"year":2005,"month":11,"monthName":"Nov","actual":0.1721,"rmsn":0.1721,"dmsn":-0.1821},{"year":2005,"month":12,"monthName":"Dec","actual":0.1722,"rmsn":0.1722,"dmsn":0.3838},{"year":2006,"month":3,"monthName":"Mar","actual":1.4011,"rmsn":1.4011,"dmsn":1.0901},{"year":2006,"month":4,"monthName":"Apr","actual":1.3289,"rmsn":1.3289,"dmsn":1.231},{"year":2006,"month":5,"monthName":"May","actual":0.9877,"rmsn":0.9877,"dmsn":0.9473},{"year":2006,"month":6,"monthName":"Jun","actual":0.9877,"rmsn":0.9877,"dmsn":0.7638},{"year":2006,"month":7,"monthName":"Jul","actual":-0.2172,"rmsn":-0.2172,"dmsn":-0.8717},{"year":2006,"month":8,"monthName":"Aug","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.3317},{"year":2006,"month":9,"monthName":"Sep","actual":-1.4406,"rmsn":-1.4406,"dmsn":-0.907},{"year":2006,"month":10,"monthName":"Oct","actual":0.3052,"rmsn":0.3052,"dmsn":0.0881},{"year":2006,"month":11,"monthName":"Nov","actual":0.3818,"rmsn":0.3818,"dmsn":0.9969},{"year":2006,"month":12,"monthName":"Dec","actual":0.7194,"rmsn":0.7194,"dmsn":0.4749},{"year":2007,"month":3,"monthName":"Mar","actual":1.2048,"rmsn":0.8488,"dmsn":0.408},{"year":2007,"month":4,"monthName":"Apr","actual":1.1173,"rmsn":0.8184,"dmsn":0.4494},{"year":2007,"month":5,"monthName":"May","actual":0.98,"rmsn":0.9553,"dmsn":0.1041},{"year":2007,"month":6,"monthName":"Jun","actual":0.7639,"rmsn":0.7212,"dmsn":0.0482},{"year":2007,"month":7,"monthName":"Jul","actual":0.149,"rmsn":0.6175,"dmsn":-1.3993},{"year":2007,"month":8,"monthName":"Aug","actual":-1.4406,"rmsn":0.3512,"dmsn":-1.4426},{"year":2007,"month":9,"monthName":"Sep","actual":-1.4006,"rmsn":-1.4406,"dmsn":-1.4405},{"year":2007,"month":10,"monthName":"Oct","actual":-1.3691,"rmsn":-1.4406,"dmsn":0.2878},{"year":2007,"month":11,"monthName":"Nov","actual":-1.3691,"rmsn":-1.4006,"dmsn":1.461},{"year":2007,"month":12,"monthName":"Dec","actual":-0.2426,"rmsn":-0.1821,"dmsn":1.9503},{"year":2008,"month":3,"monthName":"Mar","actual":0.8322,"rmsn":0.8153,"dmsn":1.3009},{"year":2008,"month":4,"monthName":"Apr","actual":0.3287,"rmsn":1.0902,"dmsn":0.0173},{"year":2008,"month":5,"monthName":"May","actual":-0.3007,"rmsn":1.2311,"dmsn":0.6195},{"year":2008,"month":6,"monthName":"Jun","actual":-1.3691,"rmsn":0.9473,"dmsn":0.0542},{"year":2008,"month":7,"monthName":"Jul","actual":-1.3691,"rmsn":0.7639,"dmsn":-1.203},{"year":2008,"month":8,"monthName":"Aug","actual":-1.3691,"rmsn":-0.6793,"dmsn":-1.4406},{"year":2008,"month":9,"monthName":"Sep","actual":-1.343,"rmsn":-1.3691,"dmsn":-2.1602},{"year":2008,"month":10,"monthName":"Oct","actual":0.4649,"rmsn":-1.3691,"dmsn":-1.2935},{"year":2008,"month":11,"monthName":"Nov","actual":0.599,"rmsn":0.0882,"dmsn":2.0214},{"year":2008,"month":12,"monthName":"Dec","actual":0.6216,"rmsn":0.1296,"dmsn":2.1374},{"year":2009,"month":3,"monthName":"Mar","actual":0.4901,"rmsn":0.2392,"dmsn":1.2078},{"year":2009,"month":4,"monthName":"Apr","actual":0.6296,"rmsn":0.408,"dmsn":1.1892},{"year":2009,"month":5,"monthName":"May","actual":0.6011,"rmsn":0.4492,"dmsn":0.7605},{"year":2009,"month":6,"monthName":"Jun","actual":0.3018,"rmsn":0.1041,"dmsn":0.4026},{"year":2009,"month":7,"monthName":"Jul","actual":-1.3691,"rmsn":0.0481,"dmsn":-1.3689},{"year":2009,"month":8,"monthName":"Aug","actual":-1.4006,"rmsn":-1.4006,"dmsn":-1.4008},{"year":2009,"month":9,"monthName":"Sep","actual":-0.2297,"rmsn":-1.4406,"dmsn":-1.4406},{"year":2009,"month":10,"monthName":"Oct","actual":0.3848,"rmsn":-1.4406,"dmsn":-0.003},{"year":2009,"month":11,"monthName":"Nov","actual":0.7212,"rmsn":0.2877,"dmsn":0.6079},{"year":2009,"month":12,"monthName":"Dec","actual":0.8488,"rmsn":1.4611,"dmsn":0.0488},{"year":2010,"month":3,"monthName":"Mar","actual":0.8184,"rmsn":1.9502,"dmsn":0.5837},{"year":2010,"month":4,"monthName":"Apr","actual":0.9553,"rmsn":1.301,"dmsn":1.0941},{"year":2010,"month":5,"monthName":"May","actual":0.7212,"rmsn":0.0171,"dmsn":0.7521},{"year":2010,"month":6,"monthName":"Jun","actual":0.6175,"rmsn":0.6196,"dmsn":-0.0096},{"year":2010,"month":7,"monthName":"Jul","actual":0.3512,"rmsn":0.6196,"dmsn":-0.0101},{"year":2010,"month":8,"monthName":"Aug","actual":-1.4406,"rmsn":0.6195,"dmsn":-1.7613},{"year":2010,"month":9,"monthName":"Sep","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.369},{"year":2010,"month":10,"monthName":"Oct","actual":-1.4006,"rmsn":-1.4406,"dmsn":1.3845},{"year":2010,"month":11,"monthName":"Nov","actual":-0.1821,"rmsn":-0.0459,"dmsn":1.6394},{"year":2010,"month":12,"monthName":"Dec","actual":0.8153,"rmsn":2.0215,"dmsn":1.8312},{"year":2011,"month":3,"monthName":"Mar","actual":1.0902,"rmsn":2.1373,"dmsn":1.8678},{"year":2011,"month":4,"monthName":"Apr","actual":1.2311,"rmsn":1.2079,"dmsn":1.199},{"year":2011,"month":5,"monthName":"May","actual":0.9473,"rmsn":0.9605,"dmsn":0.9189},{"year":2011,"month":6,"monthName":"Jun","actual":0.7639,"rmsn":0.8665,"dmsn":0.4359},{"year":2011,"month":7,"monthName":"Jul","actual":-0.6793,"rmsn":0.4024,"dmsn":-0.0614},{"year":2011,"month":8,"monthName":"Aug","actual":-1.3691,"rmsn":-1.3691,"dmsn":-1.3628},{"year":2011,"month":9,"monthName":"Sep","actual":-1.3691,"rmsn":-1.4006,"dmsn":-1.4405},{"year":2011,"month":10,"monthName":"Oct","actual":0.0882,"rmsn":-1.4406,"dmsn":-1.0032},{"year":2011,"month":11,"monthName":"Nov","actual":0.1296,"rmsn":-0.0029,"dmsn":-0.8867},{"year":2011,"month":12,"monthName":"Dec","actual":0.2392,"rmsn":0.6236,"dmsn":0.7487},{"year":2012,"month":3,"monthName":"Mar","actual":0.408,"rmsn":0.698,"dmsn":1.4149},{"year":2012,"month":4,"monthName":"Apr","actual":0.4492,"rmsn":0.9134,"dmsn":1.1489},{"year":2012,"month":5,"monthName":"May","actual":0.1041,"rmsn":0.7916,"dmsn":1.0203},{"year":2012,"month":6,"monthName":"Jun","actual":0.0481,"rmsn":0.7522,"dmsn":0.1633},{"year":2012,"month":7,"monthName":"Jul","actual":-1.4006,"rmsn":-0.0097,"dmsn":-0.8866},{"year":2012,"month":8,"monthName":"Aug","actual":-1.4406,"rmsn":-0.0097,"dmsn":-1.441},{"year":2012,"month":9,"monthName":"Sep","actual":-1.4406,"rmsn":-1.3691,"dmsn":-1.1372},{"year":2012,"month":10,"monthName":"Oct","actual":0.2877,"rmsn":-1.3691,"dmsn":-1.4405},{"year":2012,"month":11,"monthName":"Nov","actual":1.4611,"rmsn":1.3845,"dmsn":-0.3011},{"year":2012,"month":12,"monthName":"Dec","actual":1.9502,"rmsn":1.6394,"dmsn":-0.293},{"year":2013,"month":3,"monthName":"Mar","actual":1.301,"rmsn":1.8311,"dmsn":1.446},{"year":2013,"month":4,"monthName":"Apr","actual":0.0171,"rmsn":1.1283,"dmsn":0.9124},{"year":2013,"month":5,"monthName":"May","actual":0.6196,"rmsn":1.2069,"dmsn":1.4478},{"year":2013,"month":6,"monthName":"Jun","actual":0.6196,"rmsn":0.9189,"dmsn":1.4243},{"year":2013,"month":7,"monthName":"Jul","actual":0.6195,"rmsn":0.4358,"dmsn":0.2234},{"year":2013,"month":8,"monthName":"Aug","actual":-1.4406,"rmsn":-0.0614,"dmsn":-1.4013},{"year":2013,"month":9,"monthName":"Sep","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.4005},{"year":2013,"month":10,"monthName":"Oct","actual":-0.0459,"rmsn":-1.4406,"dmsn":0.4249},{"year":2013,"month":11,"monthName":"Nov","actual":2.0215,"rmsn":-1.0032,"dmsn":1.2991},{"year":2013,"month":12,"monthName":"Dec","actual":2.1373,"rmsn":-0.8867,"dmsn":1.5311},{"year":2014,"month":3,"monthName":"Mar","actual":1.2079,"rmsn":0.7488,"dmsn":1.5373},{"year":2014,"month":4,"monthName":"Apr","actual":0.9605,"rmsn":1.1683,"dmsn":1.1955},{"year":2014,"month":5,"monthName":"May","actual":0.8665,"rmsn":1.1491,"dmsn":1.0301},{"year":2014,"month":6,"monthName":"Jun","actual":0.4024,"rmsn":1.0202,"dmsn":0.7517},{"year":2014,"month":7,"monthName":"Jul","actual":-1.3691,"rmsn":0.163,"dmsn":-0.4994},{"year":2014,"month":8,"monthName":"Aug","actual":-1.4006,"rmsn":-0.8867,"dmsn":-1.4408},{"year":2014,"month":9,"monthName":"Sep","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.4404},{"year":2014,"month":10,"monthName":"Oct","actual":-0.0029,"rmsn":-1.4406,"dmsn":-1.1762},{"year":2014,"month":11,"monthName":"Nov","actual":0.6236,"rmsn":-1.4406,"dmsn":-0.6801},{"year":2014,"month":12,"monthName":"Dec","actual":0.698,"rmsn":-0.3011,"dmsn":-0.2553},{"year":2015,"month":3,"monthName":"Mar","actual":0.9134,"rmsn":-0.2932,"dmsn":1.6619},{"year":2015,"month":4,"monthName":"Apr","actual":0.7916,"rmsn":1.4461,"dmsn":1.4095},{"year":2015,"month":5,"monthName":"May","actual":0.7522,"rmsn":1.9926,"dmsn":0.7514},{"year":2015,"month":6,"monthName":"Jun","actual":-0.0097,"rmsn":1.4478,"dmsn":-0.1121},{"year":2015,"month":7,"monthName":"Jul","actual":-0.0097,"rmsn":1.4242,"dmsn":-1.4403},{"year":2015,"month":8,"monthName":"Aug","actual":-1.3691,"rmsn":0.2233,"dmsn":-1.4407},{"year":2015,"month":9,"monthName":"Sep","actual":-1.3691,"rmsn":-1.4006,"dmsn":-1.4404},{"year":2015,"month":10,"monthName":"Oct","actual":1.3845,"rmsn":-1.4006,"dmsn":-0.6671},{"year":2015,"month":11,"monthName":"Nov","actual":1.6394,"rmsn":0.4249,"dmsn":1.3783},{"year":2015,"month":12,"monthName":"Dec","actual":1.8311,"rmsn":1.2991,"dmsn":1.5603},{"year":2016,"month":3,"monthName":"Mar","actual":1.1283,"rmsn":1.531,"dmsn":0.599},{"year":2016,"month":4,"monthName":"Apr","actual":1.2069,"rmsn":1.5373,"dmsn":0.58},{"year":2016,"month":5,"monthName":"May","actual":0.9189,"rmsn":1.1955,"dmsn":0.5102},{"year":2016,"month":6,"monthName":"Jun","actual":0.4358,"rmsn":1.03,"dmsn":-0.469},{"year":2016,"month":7,"monthName":"Jul","actual":-0.0614,"rmsn":0.3352,"dmsn":-1.4405},{"year":2016,"month":8,"monthName":"Aug","actual":-1.4406,"rmsn":-0.4996,"dmsn":-1.4408},{"year":2016,"month":9,"monthName":"Sep","actual":-1.4406,"rmsn":-1.4406,"dmsn":-1.4401},{"year":2016,"month":10,"monthName":"Oct","actual":-1.0032,"rmsn":-1.4406,"dmsn":-0.4822},{"year":2016,"month":11,"monthName":"Nov","actual":-0.8867,"rmsn":-1.4406,"dmsn":-0.3535},{"year":2016,"month":12,"monthName":"Dec","actual":0.7488,"rmsn":-0.68,"dmsn":-0.2705},{"year":2017,"month":3,"monthName":"Mar","actual":1.1683,"rmsn":0.5799,"dmsn":0.6633},{"year":2017,"month":4,"monthName":"Apr","actual":1.1491,"rmsn":1.1997,"dmsn":0.406},{"year":2017,"month":5,"monthName":"May","actual":1.0202,"rmsn":0.7835,"dmsn":-0.5656},{"year":2017,"month":6,"monthName":"Jun","actual":0.163,"rmsn":0.6722,"dmsn":-0.4017},{"year":2017,"month":7,"monthName":"Jul","actual":-0.8867,"rmsn":-0.1122,"dmsn":1.3005},{"year":2017,"month":8,"monthName":"Aug","actual":-1.4406,"rmsn":-1.4406,"dmsn":0.7247},{"year":2017,"month":9,"monthName":"Sep","actual":-1.4406,"rmsn":-1.4406,"dmsn":0.1349},{"year":2017,"month":10,"monthName":"Oct","actual":-1.4406,"rmsn":-1.4406,"dmsn":0.7724},{"year":2017,"month":11,"monthName":"Nov","actual":-0.3011,"rmsn":-1.4406,"dmsn":-0.6697},{"year":2017,"month":12,"monthName":"Dec","actual":-0.2932,"rmsn":1.3784,"dmsn":-0.4497},{"year":2018,"month":3,"monthName":"Mar","actual":1.4461,"rmsn":1.4028,"dmsn":-0.0804},{"year":2018,"month":4,"monthName":"Apr","actual":1.9926,"rmsn":0.599,"dmsn":0.6099},{"year":2018,"month":5,"monthName":"May","actual":1.4478,"rmsn":0.5799,"dmsn":1.0085},{"year":2018,"month":6,"monthName":"Jun","actual":1.4242,"rmsn":-0.0776,"dmsn":-1.4798},{"year":2018,"month":7,"monthName":"Jul","actual":0.2233,"rmsn":-0.4692,"dmsn":0.818},{"year":2018,"month":8,"monthName":"Aug","actual":-1.4006,"rmsn":-1.4406,"dmsn":-0.8743},{"year":2018,"month":9,"monthName":"Sep","actual":-1.4006,"rmsn":-1.4406,"dmsn":0.1203},{"year":2018,"month":10,"monthName":"Oct","actual":0.4249,"rmsn":-1.4406,"dmsn":0
